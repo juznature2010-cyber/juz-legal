@@ -35,7 +35,8 @@ npm run start
 1. Đẩy thư mục `juz-legal` lên GitHub.
 2. Import project trên [vercel.com](https://vercel.com).
 3. Root Directory: `juz-legal`
-4. Biến môi trường: `NEXT_PUBLIC_SITE_URL=https://your-domain.vn`
+4. Biến môi trường: `NEXT_PUBLIC_SITE_URL=https://juzlegal.com`
+5. Gắn domain `juzlegal.com` trong Vercel → Settings → Domains
 
 ### VPS (Node)
 
@@ -50,7 +51,7 @@ pm2 start npm --name juz-legal -- start
 ```nginx
 server {
     listen 80;
-    server_name juzlegal.vn;
+    server_name juzlegal.com www.juzlegal.com;
     location / {
         proxy_pass http://127.0.0.1:3000;
         proxy_http_version 1.1;

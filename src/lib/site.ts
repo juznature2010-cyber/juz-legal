@@ -3,12 +3,12 @@ export const siteConfig = {
   legalName: "Công ty TNHH Dịch vụ Pháp lý JUZ",
   description:
     "JUZ Legal cung cấp dịch vụ pháp lý chuyên sâu trong lĩnh vực doanh nghiệp, đầu tư, tranh tụng, đất đai, lao động, sở hữu trí tuệ và hôn nhân gia đình.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://juzlegal.vn",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://juzlegal.com",
   ogImage: "/og-image.jpg",
   locale: "vi_VN",
   phone: "1900 6868",
   phoneDisplay: "1900 6868",
-  email: "contact@juzlegal.vn",
+  email: "contact@juzlegal.com",
   address: "Tầng 12, Tòa nhà ABC, Quận 1, TP. Hồ Chí Minh",
   workingHours: "Thứ 2 – Thứ 6: 8:00 – 18:00 | Thứ 7: 8:00 – 12:00",
   mapEmbed:

@@ -1,17 +1,22 @@
 "use client";
 
+import { useMemo } from "react";
 import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { createClient } from "@/lib/supabase/client";
+import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 
 export function AdminSignOut() {
-  const supabase = createClient();
+  const supabase = useMemo(
+    () => (isSupabaseConfigured() ? createClient() : null),
+    []
+  );
 
   return (
     <Button
       variant="outline"
       size="sm"
       onClick={async () => {
+        if (!supabase) return;
         await supabase.auth.signOut();
         window.location.href = "/";
       }}

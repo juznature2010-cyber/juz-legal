@@ -42,7 +42,7 @@ $tasks = @(
     @{ title = "Thêm logo và ảnh OG"; body = "public/brand/logo.png, public/og-image.jpg (1200x630)" },
     @{ title = "Cập nhật nội dung đội ngũ & dịch vụ"; body = "Chỉnh src/lib/data.ts" },
     @{ title = "Viết nội dung blog đầy đủ"; body = "Mở rộng blogPosts trong data.ts" },
-    @{ title = "Deploy Vercel + domain"; body = "Import repo, set env Supabase, gắn juzlegal.vn" },
+    @{ title = "Deploy Vercel + domain"; body = "Import repo, set env Supabase, gắn juzlegal.com" },
     @{ title = "Bật xác nhận email (production)"; body = "Supabase Auth → Confirm email ON trước khi public" }
 )
 

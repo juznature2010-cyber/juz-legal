@@ -1,17 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { createClient } from "@/lib/supabase/client";
+import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { mapSupabaseAuthError } from "@/lib/auth-utils";
 
 export function RegisterForm() {
   const router = useRouter();
-  const supabase = createClient();
+  const supabase = useMemo(
+    () => (isSupabaseConfigured() ? createClient() : null),
+    []
+  );
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -38,6 +41,12 @@ export function RegisterForm() {
     }
 
     setLoading(true);
+
+    if (!supabase) {
+      setError("Hệ thống đăng ký chưa được cấu hình. Vui lòng thử lại sau.");
+      setLoading(false);
+      return;
+    }
 
     const { data, error: signUpError } = await supabase.auth.signUp({
       email,

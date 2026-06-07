@@ -1,19 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { createClient } from "@/lib/supabase/client";
+import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { getDashboardPath, mapSupabaseAuthError, resolveUserRole } from "@/lib/auth-utils";
 
 export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
-  const supabase = createClient();
+  const supabase = useMemo(
+    () => (isSupabaseConfigured() ? createClient() : null),
+    []
+  );
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,6 +27,12 @@ export function LoginForm() {
     e.preventDefault();
     setError("");
     setLoading(true);
+
+    if (!supabase) {
+      setError("Hệ thống đăng nhập chưa được cấu hình. Vui lòng thử lại sau.");
+      setLoading(false);
+      return;
+    }
 
     const { data, error: signInError } = await supabase.auth.signInWithPassword({
       email,

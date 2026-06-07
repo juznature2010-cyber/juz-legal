@@ -1,19 +1,23 @@
 import { createBrowserClient } from "@supabase/ssr";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import {
+  getSupabaseEnv,
+  isSupabaseConfigured,
+} from "@/lib/supabase/env";
 
-export function isSupabaseConfigured() {
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
-  return (
-    !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
-    !!key &&
-    !key.includes("THAY_BANG") &&
-    !key.includes("paste-anon") &&
-    key.length > 20
-  );
-}
+export { isSupabaseConfigured } from "@/lib/supabase/env";
+
+let browserClient: SupabaseClient | null = null;
 
 export function createClient() {
-  return createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ""
-  );
+  if (!isSupabaseConfigured()) {
+    throw new Error("Supabase chưa được cấu hình. Kiểm tra biến môi trường trên Vercel.");
+  }
+
+  if (!browserClient) {
+    const { url, anonKey } = getSupabaseEnv();
+    browserClient = createBrowserClient(url, anonKey);
+  }
+
+  return browserClient;
 }

@@ -12,9 +12,9 @@ type LogoProps = {
 };
 
 const sizeMap = {
-  sm: { width: 80, height: 80, className: "h-9 w-9" },
-  md: { width: 96, height: 96, className: "h-10 w-10 md:h-11 md:w-11" },
-  lg: { width: 128, height: 128, className: "h-14 w-14 md:h-16 md:w-16" },
+  sm: { width: 88, height: 88, className: "h-9 w-9 sm:h-10 sm:w-10" },
+  md: { width: 104, height: 104, className: "h-10 w-10 md:h-12 md:w-12" },
+  lg: { width: 140, height: 140, className: "h-14 w-14 md:h-[4.5rem] md:w-[4.5rem]" },
 };
 
 export function Logo({
@@ -34,7 +34,7 @@ export function Logo({
       height={dimensions.height}
       priority={priority}
       className={cn(
-        "aspect-square object-contain object-center",
+        "aspect-square object-contain object-center drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)]",
         dimensions.className,
         imageClassName
       )}

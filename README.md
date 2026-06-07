@@ -1,6 +1,6 @@
 # JUZ LEGAL — Website
 
-Website chính thức **Công ty TNHH Dịch vụ Pháp lý JUZ** — Next.js, TypeScript, Tailwind CSS, Framer Motion.
+Website chính thức **Dịch vụ Pháp lý JUZ legal** — Next.js, TypeScript, Tailwind CSS, Framer Motion.
 
 ## Công nghệ
 

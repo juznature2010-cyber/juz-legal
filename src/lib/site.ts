@@ -1,7 +1,7 @@
 export const siteConfig = {
   name: "JUZ LEGAL",
-  logo: "/logo.svg",
-  legalName: "Công ty TNHH Dịch vụ Pháp lý JUZ",
+  logo: "/logo.png",
+  legalName: "Dịch vụ Pháp lý JUZ legal",
   description:
     "JUZ Legal cung cấp dịch vụ pháp lý chuyên sâu trong lĩnh vực doanh nghiệp, đầu tư, tranh tụng, đất đai, lao động, sở hữu trí tuệ và hôn nhân gia đình.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://juzlegal.com",

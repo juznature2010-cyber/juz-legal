@@ -11,7 +11,7 @@ export function Footer() {
       <div className="container-premium py-12 sm:py-16 md:py-20 lg:py-24">
         <div className="grid gap-10 sm:gap-12 lg:grid-cols-12 lg:gap-14">
           <div className="lg:col-span-5">
-            <Logo href="/" size="lg" className="bg-white" />
+            <Logo href="/" size="lg" />
             <p className="mt-2 text-[10px] uppercase tracking-[0.22em] text-white/40 sm:text-[11px] sm:tracking-[0.25em]">
               {siteConfig.legalName}
             </p>

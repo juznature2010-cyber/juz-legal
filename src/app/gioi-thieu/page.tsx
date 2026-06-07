@@ -3,12 +3,13 @@ import { createMetadata } from "@/lib/seo";
 import { PageBanner } from "@/components/sections/page-banner";
 import { FadeIn } from "@/components/motion";
 import { companyHistory, values, achievements } from "@/lib/data";
+import { siteConfig } from "@/lib/site";
 import { Button } from "@/components/ui/button";
 
 export const metadata = createMetadata({
   title: "Giới thiệu",
   description:
-    "Giới thiệu Công ty TNHH Dịch vụ Pháp lý JUZ — tầm nhìn, sứ mệnh và giá trị cốt lõi.",
+    "Giới thiệu Dịch vụ Pháp lý JUZ legal — tầm nhìn, sứ mệnh và giá trị cốt lõi.",
   path: "/gioi-thieu",
 });
 
@@ -25,7 +26,7 @@ export default function AboutPage() {
         <div className="container-narrow">
           <FadeIn>
             <p className="text-lg leading-relaxed text-muted">
-              Công ty TNHH Dịch vụ Pháp lý JUZ (JUZ Legal) được thành lập với sứ mệnh mang
+              {siteConfig.legalName} (JUZ Legal) được thành lập với sứ mệnh mang
               đến giải pháp pháp lý toàn diện, minh bạch và hiệu quả — phục vụ doanh nghiệp
               trong nước, nhà đầu tư FDI và khách hàng cá nhân có nhu cầu tư vấn cao cấp.
             </p>

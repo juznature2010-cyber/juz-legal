@@ -353,7 +353,7 @@ export const blogPosts: BlogPost[] = [
 ];
 
 export const companyHistory = [
-  { year: "2015", event: "Thành lập Công ty TNHH Dịch vụ Pháp lý JUZ tại TP.HCM." },
+  { year: "2015", event: "Thành lập Dịch vụ Pháp lý JUZ legal tại TP.HCM." },
   { year: "2018", event: "Mở rộng bộ phận FDI và tranh tụng thương mại." },
   { year: "2022", event: "Đối tác chiến lược với các hãng luật khu vực ASEAN." },
   { year: "2026", event: "Ra mắt nền tảng đặt lịch tư vấn trực tuyến JUZ Legal." },

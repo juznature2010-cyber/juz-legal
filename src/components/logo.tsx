@@ -12,9 +12,9 @@ type LogoProps = {
 };
 
 const sizeMap = {
-  sm: { width: 120, height: 40, className: "h-8 w-auto sm:h-9" },
-  md: { width: 150, height: 48, className: "h-9 w-auto sm:h-10 md:h-11" },
-  lg: { width: 200, height: 64, className: "h-12 w-auto sm:h-14 md:h-16" },
+  sm: { width: 80, height: 80, className: "h-9 w-9" },
+  md: { width: 96, height: 96, className: "h-10 w-10 md:h-11 md:w-11" },
+  lg: { width: 128, height: 128, className: "h-14 w-14 md:h-16 md:w-16" },
 };
 
 export function Logo({
@@ -34,7 +34,7 @@ export function Logo({
       height={dimensions.height}
       priority={priority}
       className={cn(
-        "w-auto object-contain object-left",
+        "aspect-square object-contain object-center",
         dimensions.className,
         imageClassName
       )}
@@ -49,7 +49,7 @@ export function Logo({
     <Link
       href={href}
       className={cn(
-        "group inline-flex shrink-0 items-center rounded-sm bg-white/95 px-2 py-1 transition hover:bg-white sm:px-2.5 sm:py-1.5",
+        "group inline-flex shrink-0 items-center transition hover:opacity-90",
         className
       )}
       aria-label={`${siteConfig.name} — Trang chủ`}

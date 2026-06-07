@@ -10,6 +10,7 @@ import { mainNav, services } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { MobileMenu } from "@/components/mobile-menu";
 import { AuthNav } from "@/components/auth/auth-nav";
+import { Logo } from "@/components/logo";
 
 export function Header() {
   const pathname = usePathname();
@@ -37,17 +38,7 @@ export function Header() {
         )}
       >
         <div className="container-premium flex h-14 items-center justify-between gap-3 sm:gap-6 md:h-[4.5rem]">
-          <Link href="/" className="group flex min-w-0 items-center gap-2 sm:gap-4">
-            <span className="hidden h-8 w-px shrink-0 bg-gold/60 sm:block md:h-10" aria-hidden />
-            <div className="min-w-0">
-              <p className="truncate font-display text-lg font-medium tracking-wide text-white transition group-hover:text-gold sm:text-xl md:text-2xl">
-                {siteConfig.name}
-              </p>
-              <p className="hidden text-[9px] uppercase tracking-[0.3em] text-white/45 sm:block sm:tracking-[0.35em]">
-                Attorneys at Law
-              </p>
-            </div>
-          </Link>
+          <Logo priority size="md" />
 
           <nav className="hidden items-center gap-8 lg:flex" aria-label="Chính">
             {mainNav.map((item) =>

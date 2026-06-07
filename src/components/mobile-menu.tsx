@@ -4,9 +4,9 @@ import Link from "next/link";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { mainNav, services } from "@/lib/data";
-import { siteConfig } from "@/lib/site";
 import { Button } from "@/components/ui/button";
 import { AuthNav } from "@/components/auth/auth-nav";
+import { Logo } from "@/components/logo";
 
 export function MobileMenu({
   open,
@@ -34,7 +34,7 @@ export function MobileMenu({
             className="absolute right-0 top-0 flex h-full w-full max-w-[min(100%,24rem)] flex-col border-l border-white/10 bg-navy-deep p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:max-w-md sm:p-8"
           >
             <div className="flex items-center justify-between">
-              <p className="font-display text-2xl text-white">{siteConfig.name}</p>
+              <Logo size="sm" />
               <button
                 type="button"
                 onClick={onClose}

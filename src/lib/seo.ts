@@ -21,6 +21,10 @@ export function createMetadata({
   return {
     title: fullTitle,
     description,
+    icons: {
+      icon: siteConfig.logo,
+      apple: siteConfig.logo,
+    },
     metadataBase: new URL(siteConfig.url),
     alternates: { canonical: path || "/" },
     openGraph: {

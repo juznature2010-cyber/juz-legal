@@ -1,11 +1,34 @@
 "use client";
 
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { LogIn, LogOut, LayoutDashboard, UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getDashboardPath } from "@/lib/auth-utils";
 import { useAuth } from "@/components/auth/auth-provider";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
+import { cn } from "@/lib/utils";
+
+function AuthButtonGroup({
+  light,
+  children,
+}: {
+  light: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <div
+      className={cn(
+        "inline-flex items-center gap-0.5 rounded-sm border p-0.5 sm:gap-0",
+        light
+          ? "border-white/20 bg-white/5"
+          : "border-navy/10 bg-surface"
+      )}
+    >
+      {children}
+    </div>
+  );
+}
 
 export function AuthNav({ light = false }: { light?: boolean }) {
   const { user, role, loading } = useAuth();
@@ -13,12 +36,34 @@ export function AuthNav({ light = false }: { light?: boolean }) {
 
   if (!isSupabaseConfigured()) {
     return (
-      <Button variant={light ? "ghost-light" : "ghost"} size="sm" asChild>
-        <Link href="/dang-nhap">
-          <LogIn className="h-3.5 w-3.5" />
-          <span className="hidden sm:inline">Đăng nhập</span>
-        </Link>
-      </Button>
+      <AuthButtonGroup light={light}>
+        <Button
+          variant={light ? "ghost-light" : "ghost"}
+          size="sm"
+          asChild
+          className="h-8 border-0 px-2.5 shadow-none sm:px-3"
+        >
+          <Link href="/dang-ky">Đăng ký</Link>
+        </Button>
+        <span
+          className={cn(
+            "hidden h-4 w-px sm:block",
+            light ? "bg-white/20" : "bg-navy/15"
+          )}
+          aria-hidden
+        />
+        <Button
+          variant={light ? "ghost-light" : "ghost"}
+          size="sm"
+          asChild
+          className="h-8 border-0 px-2.5 shadow-none sm:px-3"
+        >
+          <Link href="/dang-nhap">
+            <LogIn className="h-3.5 w-3.5" />
+            Đăng nhập
+          </Link>
+        </Button>
+      </AuthButtonGroup>
     );
   }
 
@@ -66,19 +111,33 @@ export function AuthNav({ light = false }: { light?: boolean }) {
   }
 
   return (
-    <div className="flex items-center gap-2">
-      <Button variant={light ? "ghost-light" : "ghost"} size="sm" asChild>
-        <Link href="/dang-ky">
-          <span className="hidden sm:inline">Đăng ký</span>
-          <span className="sm:hidden">+</span>
-        </Link>
+    <AuthButtonGroup light={light}>
+      <Button
+        variant={light ? "ghost-light" : "ghost"}
+        size="sm"
+        asChild
+        className="h-8 border-0 px-2.5 shadow-none sm:px-3"
+      >
+        <Link href="/dang-ky">Đăng ký</Link>
       </Button>
-      <Button variant={light ? "ghost-light" : "ghost"} size="sm" asChild>
+      <span
+        className={cn(
+          "hidden h-4 w-px sm:block",
+          light ? "bg-white/20" : "bg-navy/15"
+        )}
+        aria-hidden
+      />
+      <Button
+        variant={light ? "ghost-light" : "ghost"}
+        size="sm"
+        asChild
+        className="h-8 border-0 px-2.5 shadow-none sm:px-3"
+      >
         <Link href="/dang-nhap">
           <LogIn className="h-3.5 w-3.5" />
-          <span className="hidden sm:inline">Đăng nhập</span>
+          Đăng nhập
         </Link>
       </Button>
-    </div>
+    </AuthButtonGroup>
   );
 }

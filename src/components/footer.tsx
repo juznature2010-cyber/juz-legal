@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { siteConfig } from "@/lib/site";
 import { mainNav, services } from "@/lib/data";
+import { Logo } from "@/components/logo";
 
 export function Footer() {
   return (
@@ -10,9 +11,7 @@ export function Footer() {
       <div className="container-premium py-12 sm:py-16 md:py-20 lg:py-24">
         <div className="grid gap-10 sm:gap-12 lg:grid-cols-12 lg:gap-14">
           <div className="lg:col-span-5">
-            <p className="font-display text-2xl font-light tracking-wide sm:text-3xl">
-              {siteConfig.name}
-            </p>
+            <Logo href="/" size="lg" className="bg-white" />
             <p className="mt-2 text-[10px] uppercase tracking-[0.22em] text-white/40 sm:text-[11px] sm:tracking-[0.25em]">
               {siteConfig.legalName}
             </p>

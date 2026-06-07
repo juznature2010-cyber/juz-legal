@@ -16,8 +16,8 @@
   --font-serif: var(--font-playfair);
   --font-display: var(--font-cormorant);
   --ease-luxury: cubic-bezier(0.22, 1, 0.36, 1);
-  --header-height: 3.5rem;
-  --header-height-md: 4.5rem;
+  --header-height: 5rem;
+  --header-height-md: 6rem;
 }
 
 @media (min-width: 768px) {

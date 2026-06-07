@@ -12,9 +12,9 @@ type LogoProps = {
 };
 
 const sizeMap = {
-  sm: { width: 176, height: 176, className: "h-[4.5rem] w-[4.5rem] sm:h-20 sm:w-20" },
-  md: { width: 208, height: 208, className: "h-20 w-20 md:h-24 md:w-24" },
-  lg: { width: 280, height: 280, className: "h-28 w-28 md:h-36 md:w-36" },
+  sm: { width: 352, height: 352, className: "h-[9rem] w-[9rem] sm:h-40 sm:w-40" },
+  md: { width: 416, height: 416, className: "h-40 w-40 md:h-48 md:w-48" },
+  lg: { width: 560, height: 560, className: "h-56 w-56 md:h-72 md:w-72" },
 };
 
 export function Logo({

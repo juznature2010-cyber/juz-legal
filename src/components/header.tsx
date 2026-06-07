@@ -37,7 +37,7 @@ export function Header() {
             : "bg-gradient-to-b from-navy-deep/80 to-transparent py-2"
         )}
       >
-        <div className="container-premium flex h-20 items-center justify-between gap-3 sm:gap-6 md:h-24">
+        <div className="container-premium flex h-40 items-center justify-between gap-3 sm:gap-6 md:h-48">
           <Logo priority size="md" />
 
           <nav className="hidden items-center gap-8 lg:flex" aria-label="Chính">

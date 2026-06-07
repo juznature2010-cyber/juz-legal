@@ -1,0 +1,186 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-navy: #0a1628;
+  --color-navy-deep: #060d18;
+  --color-navy-mid: #152238;
+  --color-navy-soft: #1e3352;
+  --color-gold: #c9a227;
+  --color-gold-light: #e0c76a;
+  --color-gold-muted: #c9a22799;
+  --color-ivory: #faf9f7;
+  --color-surface: #f4f3f0;
+  --color-muted: #5c6b7a;
+  --color-muted-light: #8b98a8;
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-playfair);
+  --font-display: var(--font-cormorant);
+  --ease-luxury: cubic-bezier(0.22, 1, 0.36, 1);
+  --header-height: 3.5rem;
+  --header-height-md: 4.5rem;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --header-height: var(--header-height-md);
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  @apply bg-ivory text-navy antialiased;
+  overflow-x: hidden;
+  font-feature-settings: "kern" 1, "liga" 1;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+::selection {
+  background: #c9a22735;
+  color: #0a1628;
+}
+
+/* Typography — responsive editorial scale */
+.text-eyebrow {
+  @apply text-[9px] font-medium uppercase tracking-[0.16em] text-gold sm:text-[11px] sm:tracking-[0.24em] md:tracking-[0.28em];
+}
+
+.text-display {
+  font-family: var(--font-display), var(--font-serif), serif;
+  @apply text-[1.65rem] font-light leading-[1.15] tracking-tight sm:text-4xl sm:leading-[1.1] md:text-5xl lg:text-6xl xl:text-[4.25rem];
+}
+
+.text-display-sm {
+  font-family: var(--font-display), var(--font-serif), serif;
+  @apply text-[1.5rem] font-light leading-[1.2] tracking-tight sm:text-3xl md:text-4xl lg:text-[2.75rem];
+}
+
+.text-lead {
+  @apply text-[0.9375rem] leading-relaxed text-white/80 sm:text-base md:text-lg md:leading-relaxed lg:text-xl;
+}
+
+.text-lead-dark {
+  @apply text-[0.9375rem] leading-relaxed text-muted sm:text-base md:text-lg;
+}
+
+.font-display {
+  font-family: var(--font-display), var(--font-serif), Georgia, serif;
+}
+
+/* Layout */
+.section-premium {
+  @apply py-14 sm:py-20 md:py-28 lg:py-32;
+}
+
+.container-premium {
+  @apply mx-auto w-full max-w-[1400px] px-4 sm:px-6 md:px-8 lg:px-12;
+}
+
+.container-narrow {
+  @apply mx-auto w-full max-w-3xl px-4 sm:px-6 md:px-8;
+}
+
+/* Offset for fixed header on inner pages */
+.page-content {
+  @apply min-w-0;
+}
+
+/* Dividers & surfaces */
+.gold-line {
+  @apply h-px w-12 bg-gold sm:w-16;
+}
+
+.gold-line-long {
+  @apply h-px w-full max-w-xs bg-gradient-to-r from-gold via-gold/50 to-transparent;
+}
+
+.card-luxury {
+  @apply border border-navy/[0.06] bg-white transition-all duration-500;
+  box-shadow: 0 1px 0 rgb(10 22 40 / 0.04);
+}
+
+@media (hover: hover) {
+  .card-luxury:hover {
+    @apply border-gold/25;
+    box-shadow:
+      0 24px 48px -12px rgb(10 22 40 / 0.08),
+      0 0 0 1px rgb(201 162 39 / 0.08);
+  }
+}
+
+/* Cinematic overlays — stronger on mobile for readability */
+.overlay-hero {
+  background: linear-gradient(
+    180deg,
+    rgb(6 13 24 / 0.55) 0%,
+    rgb(10 22 40 / 0.88) 55%,
+    rgb(6 13 24 / 0.95) 100%
+  );
+}
+
+@media (min-width: 768px) {
+  .overlay-hero {
+    background: linear-gradient(
+      105deg,
+      rgb(6 13 24 / 0.92) 0%,
+      rgb(10 22 40 / 0.78) 45%,
+      rgb(10 22 40 / 0.55) 100%
+    );
+  }
+}
+
+.overlay-banner {
+  background: linear-gradient(
+    to bottom,
+    rgb(6 13 24 / 0.7) 0%,
+    rgb(10 22 40 / 0.9) 100%
+  );
+}
+
+/* Subtle film grain */
+.grain::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Nav */
+.nav-link {
+  @apply relative text-[11px] font-medium uppercase tracking-[0.18em] text-white/85 transition-colors duration-300 hover:text-gold;
+}
+
+.nav-link::after {
+  content: "";
+  @apply absolute -bottom-1 left-0 h-px w-0 bg-gold transition-all duration-300;
+}
+
+.nav-link:hover::after,
+.nav-link-active::after {
+  @apply w-full;
+}
+
+.nav-link-active {
+  @apply text-gold;
+}
+
+/* Full-width CTA row on mobile */
+.btn-row-mobile {
+  @apply flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap;
+}
+
+.btn-row-mobile > * {
+  @apply w-full sm:w-auto;
+}

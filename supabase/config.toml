@@ -1,0 +1,15 @@
+# Supabase CLI config (tùy chọn)
+# Project ref từ URL: ssnaglboujsbmjnkguhr
+
+project_id = "ssnaglboujsbmjnkguhr"
+
+[api]
+enabled = true
+
+[db]
+major_version = 15
+
+[auth]
+enabled = true
+site_url = "http://localhost:5173"
+additional_redirect_urls = ["http://localhost:5173/**"]

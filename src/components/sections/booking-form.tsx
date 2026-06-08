@@ -84,6 +84,7 @@ export function BookingForm() {
         <select
           id="lawyer"
           name="lawyer"
+          defaultValue="tran-dinh-long"
           className="mt-1.5 flex h-11 w-full rounded-md border border-navy/15 bg-white px-4 text-sm"
         >
           <option value="">Bất kỳ luật sư phù hợp</option>

@@ -290,12 +290,12 @@ export const workProcess = [
 
 export const team: TeamMember[] = [
   {
-    slug: "nguyen-van-an",
-    name: "LS. Nguyễn Văn An",
+    slug: "tran-dinh-long",
+    name: "LS. Trần Đình Long",
     role: "Giám đốc điều hành",
     specialty: "Doanh nghiệp, M&A, FDI",
-    experience: "18 năm — từng là cố vấn tại tập đoàn đa quốc gia",
-    license: "Thành viên Đoàn luật sư TP.HCM",
+    experience: "40 năm công tác pháp luật — Nguyên Chánh án, Phó Chánh án",
+    license: "Chứng chỉ trọng tài quốc tế",
     image: "/team/placeholder-1.jpg",
   },
   {

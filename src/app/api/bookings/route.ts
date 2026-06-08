@@ -34,7 +34,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Hình thức không hợp lệ." }, { status: 400 });
     }
 
-    const today = new Date().toISOString().slice(0, 10);
+    const today = new Date().toLocaleDateString("en-CA", {
+      timeZone: "Asia/Ho_Chi_Minh",
+    });
     if (bookingDate < today) {
       return NextResponse.json(
         { error: "Ngày đặt lịch không thể là ngày trong quá khứ." },
@@ -72,7 +74,7 @@ export async function POST(request: Request) {
       ? (getTeamMember(lawyerSlug)?.name ?? lawyerSlug)
       : null;
 
-    void sendBookingNotification({
+    const emailResult = await sendBookingNotification({
       serviceTitle,
       lawyerName,
       bookingDate,
@@ -82,6 +84,10 @@ export async function POST(request: Request) {
       clientPhone,
       note,
     });
+
+    if (!emailResult.ok && !emailResult.skipped) {
+      console.error("[bookings] Dat lich da luu nhung gui mail that bai");
+    }
 
     return NextResponse.json({ ok: true });
   } catch {

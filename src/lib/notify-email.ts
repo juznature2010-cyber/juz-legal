@@ -6,18 +6,20 @@ type SendEmailInput = {
   text: string;
 };
 
+function cleanEnv(value: string | undefined) {
+  return (value ?? "").trim().replace(/^["']|["']$/g, "");
+}
+
 function getNotifyEmail() {
   return (
-    process.env.BOOKING_NOTIFY_EMAIL ??
-    process.env.CONTACT_NOTIFY_EMAIL ??
+    cleanEnv(process.env.BOOKING_NOTIFY_EMAIL) ||
+    cleanEnv(process.env.CONTACT_NOTIFY_EMAIL) ||
     siteConfig.bookingNotifyEmail
   );
 }
 
 function getFromEmail() {
-  return (
-    process.env.EMAIL_FROM ?? "JUZ Legal <onboarding@resend.dev>"
-  );
+  return cleanEnv(process.env.EMAIL_FROM) || "onboarding@resend.dev";
 }
 
 export async function sendNotificationEmail(input: SendEmailInput) {
@@ -49,11 +51,19 @@ export async function sendNotificationEmail(input: SendEmailInput) {
 
   if (!res.ok) {
     const detail = await res.text();
-    console.error("[notify-email] Gửi mail thất bại:", res.status, detail);
-    return { ok: false, skipped: false as const };
+    console.error(
+      "[notify-email] Gui mail that bai:",
+      res.status,
+      "to=",
+      to,
+      detail
+    );
+    return { ok: false, skipped: false as const, error: detail };
   }
 
-  return { ok: true, skipped: false as const };
+  const data = (await res.json()) as { id?: string };
+  console.log("[notify-email] Da gui mail dat lich toi", to, "id=", data.id);
+  return { ok: true, skipped: false as const, id: data.id };
 }
 
 export type BookingEmailPayload = {

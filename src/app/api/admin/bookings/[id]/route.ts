@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { requireAdminApi } from "@/lib/admin-auth";
 import { enrichBooking } from "@/lib/admin-data";
+import { sendBookingConfirmedNotification } from "@/lib/notify-email";
 import { sendBookingConfirmationZalo } from "@/lib/notify-zalo";
 import type { Booking } from "@/lib/supabase/types";
 
@@ -88,7 +89,7 @@ export async function PATCH(
     return NextResponse.json({ error: "Không tìm thấy đặt lịch." }, { status: 404 });
   }
 
-  const shouldNotifyZalo =
+  const shouldNotifyConfirmed =
     updates.status === "confirmed" && existing.status !== "confirmed";
 
   const { data, error } = await supabase
@@ -116,18 +117,30 @@ export async function PATCH(
     | { ok: false; skipped: false; error: string }
     | undefined;
 
-  if (shouldNotifyZalo) {
+  if (shouldNotifyConfirmed) {
     const enriched = enrichBooking(data as Booking);
-    zalo = await sendBookingConfirmationZalo({
-      bookingId: data.id,
+    const notifyPayload = {
       serviceTitle: enriched.serviceTitle,
       lawyerName: enriched.lawyerName,
       bookingDate: data.booking_date,
       bookingTime: data.booking_time,
-      mode: data.mode,
+      mode: data.mode as Booking["mode"],
       clientName: data.client_name,
       clientPhone: data.client_phone,
       note: data.note,
+    };
+
+    const emailResult = await sendBookingConfirmedNotification(notifyPayload);
+    if (!emailResult.ok && !emailResult.skipped) {
+      console.error(
+        "[admin/bookings] Xac nhan thanh cong nhung gui mail that bai:",
+        emailResult.error
+      );
+    }
+
+    zalo = await sendBookingConfirmationZalo({
+      bookingId: data.id,
+      ...notifyPayload,
     });
 
     if (!zalo.ok && !zalo.skipped) {

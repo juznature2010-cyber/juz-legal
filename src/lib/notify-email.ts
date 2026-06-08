@@ -117,6 +117,46 @@ export async function sendBookingNotification(payload: BookingEmailPayload) {
   });
 }
 
+export async function sendBookingConfirmedNotification(payload: BookingEmailPayload) {
+  const modeLabel = payload.mode === "online" ? "Trực tuyến" : "Tại văn phòng";
+  const timeShort = payload.bookingTime.slice(0, 5);
+
+  const lines = [
+    "Lịch tư vấn đã được xác nhận trên admin JUZ Legal.",
+    "",
+    `Khách hàng: ${payload.clientName}`,
+    `Điện thoại: ${payload.clientPhone}`,
+    `Dịch vụ: ${payload.serviceTitle}`,
+    payload.lawyerName ? `Luật sư: ${payload.lawyerName}` : null,
+    `Ngày giờ đã xác nhận: ${payload.bookingDate} ${timeShort}`,
+    `Hình thức: ${modeLabel}`,
+    payload.note ? `Ghi chú: ${payload.note}` : null,
+    "",
+    `Xem trong admin: ${siteConfig.url}/admin/dat-lich`,
+  ].filter(Boolean);
+
+  const text = lines.join("\n");
+  const html = `
+    <h2>Lịch tư vấn đã xác nhận — JUZ Legal</h2>
+    <ul>
+      <li><strong>Khách hàng:</strong> ${escapeHtml(payload.clientName)}</li>
+      <li><strong>Điện thoại:</strong> ${escapeHtml(payload.clientPhone)}</li>
+      <li><strong>Dịch vụ:</strong> ${escapeHtml(payload.serviceTitle)}</li>
+      ${payload.lawyerName ? `<li><strong>Luật sư:</strong> ${escapeHtml(payload.lawyerName)}</li>` : ""}
+      <li><strong>Ngày giờ đã xác nhận:</strong> ${escapeHtml(payload.bookingDate)} ${escapeHtml(timeShort)}</li>
+      <li><strong>Hình thức:</strong> ${escapeHtml(modeLabel)}</li>
+      ${payload.note ? `<li><strong>Ghi chú:</strong> ${escapeHtml(payload.note)}</li>` : ""}
+    </ul>
+    <p><a href="${siteConfig.url}/admin/dat-lich">Mở bảng quản trị đặt lịch</a></p>
+  `;
+
+  return sendNotificationEmail({
+    subject: `[JUZ Legal] Lịch đã xác nhận — ${payload.clientName}`,
+    text,
+    html,
+  });
+}
+
 function escapeHtml(value: string) {
   return value
     .replaceAll("&", "&amp;")

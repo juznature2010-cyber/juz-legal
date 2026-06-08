@@ -38,12 +38,17 @@ export function Header() {
         )}
       >
         <div className="container-premium flex h-[var(--header-bar-height)] items-center justify-between gap-2 px-3 sm:gap-3 sm:px-6 md:h-[var(--header-bar-height-md)] lg:px-8">
-          <Logo priority size="md" className="relative z-20 shrink-0" />
+          <div className="flex min-w-0 flex-1 items-center gap-3 sm:gap-4 xl:gap-5 2xl:gap-6">
+            <Logo
+              priority
+              size="md"
+              className="relative z-20 ml-4 shrink-0 translate-y-1 sm:ml-6 md:ml-10 md:translate-y-1.5 lg:ml-14 xl:ml-16"
+            />
 
-          <nav
-            className="hidden flex-1 items-center justify-center gap-3 px-1 xl:flex xl:gap-5 2xl:gap-8"
-            aria-label="Chính"
-          >
+            <nav
+              className="hidden min-w-0 items-center gap-3 xl:flex xl:gap-5 2xl:gap-8"
+              aria-label="Chính"
+            >
             {mainNav.map((item) =>
               item.href === "/dich-vu" ? (
                 <div
@@ -101,7 +106,8 @@ export function Header() {
                 </Link>
               )
             )}
-          </nav>
+            </nav>
+          </div>
 
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
             <div className="hidden items-center gap-2 xl:flex xl:gap-3 2xl:gap-5">

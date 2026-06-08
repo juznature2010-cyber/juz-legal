@@ -7,9 +7,9 @@ export const siteConfig = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://juzlegal.com",
   ogImage: "/og-image.jpg",
   locale: "vi_VN",
-  phone: "1900 6868",
-  phoneDisplay: "1900 6868",
-  email: "contact@juzlegal.com",
+  phone: "1900633266",
+  phoneDisplay: "1900 633 266",
+  email: "juz.legal2010@gmail.com",
   address: "Tầng 12, Tòa nhà ABC, Quận 1, TP. Hồ Chí Minh",
   workingHours: "Thứ 2 – Thứ 6: 8:00 – 18:00 | Thứ 7: 8:00 – 12:00",
   mapEmbed:

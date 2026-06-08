@@ -5,7 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { services, team } from "@/lib/data";
+import { getTeamMember, services } from "@/lib/data";
+
+const BOOKING_LAWYER_SLUG = "tran-dinh-long";
+const bookingLawyer = getTeamMember(BOOKING_LAWYER_SLUG);
 
 function todayInputValue() {
   return new Date().toISOString().slice(0, 10);
@@ -28,7 +31,7 @@ export function BookingForm() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         serviceSlug: form.get("service"),
-        lawyerSlug: form.get("lawyer") || null,
+        lawyerSlug: BOOKING_LAWYER_SLUG,
         bookingDate: form.get("date"),
         bookingTime: form.get("time"),
         mode: form.get("mode"),
@@ -80,20 +83,14 @@ export function BookingForm() {
         </select>
       </div>
       <div>
-        <Label htmlFor="lawyer">Luật sư (tùy chọn)</Label>
-        <select
-          id="lawyer"
-          name="lawyer"
-          defaultValue="tran-dinh-long"
-          className="mt-1.5 flex h-11 w-full rounded-md border border-navy/15 bg-white px-4 text-sm"
-        >
-          <option value="">Bất kỳ luật sư phù hợp</option>
-          {team.map((m) => (
-            <option key={m.slug} value={m.slug}>
-              {m.name}
-            </option>
-          ))}
-        </select>
+        <Label htmlFor="lawyer">Luật sư tư vấn</Label>
+        <input type="hidden" name="lawyer" value={BOOKING_LAWYER_SLUG} />
+        <p className="mt-1.5 rounded-md border border-navy/15 bg-surface px-4 py-3 text-sm text-navy">
+          {bookingLawyer?.name ?? "LS. Trần Đình Long"}
+          {bookingLawyer?.role ? (
+            <span className="mt-0.5 block text-xs text-muted">{bookingLawyer.role}</span>
+          ) : null}
+        </p>
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>

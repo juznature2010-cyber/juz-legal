@@ -37,101 +37,101 @@ export function Header() {
             : "bg-gradient-to-b from-navy-deep/80 to-transparent"
         )}
       >
-        <div className="container-premium flex h-[var(--header-bar-height)] items-center justify-between gap-2 px-3 sm:gap-3 sm:px-6 md:h-[var(--header-bar-height-md)] lg:px-8">
-          <div className="flex min-w-0 flex-1 items-center gap-3 sm:gap-4 xl:gap-5 2xl:gap-6">
-            <Logo
-              priority
-              size="md"
-              className="relative z-20 ml-4 shrink-0 translate-y-1 sm:ml-6 md:ml-10 md:translate-y-1.5 lg:ml-14 xl:ml-16"
-            />
+        <div className="container-premium relative flex h-[var(--header-bar-height)] items-center md:h-[var(--header-bar-height-md)]">
+          <Logo
+            priority
+            size="md"
+            className="absolute left-3 top-1/2 z-20 shrink-0 -translate-y-1/2 sm:left-5 md:left-8 lg:left-10"
+          />
 
+          <div className="flex w-full min-w-0 items-center justify-end gap-2 pl-[10.5rem] sm:pl-[11rem] md:pl-[13rem] lg:justify-between lg:pl-[14.5rem] xl:pl-[15.5rem]">
             <nav
-              className="hidden min-w-0 items-center gap-3 xl:flex xl:gap-5 2xl:gap-8"
+              className="hidden min-w-0 flex-1 flex-nowrap items-center justify-start gap-2 overflow-hidden lg:flex lg:gap-2.5 xl:gap-3 2xl:gap-4"
               aria-label="Chính"
             >
-            {mainNav.map((item) =>
-              item.href === "/dich-vu" ? (
-                <div
-                  key={item.href}
-                  className="relative"
-                  onMouseEnter={() => setMegaOpen(true)}
-                  onMouseLeave={() => setMegaOpen(false)}
-                >
+              {mainNav.map((item) =>
+                item.href === "/dich-vu" ? (
+                  <div
+                    key={item.href}
+                    className="relative shrink-0"
+                    onMouseEnter={() => setMegaOpen(true)}
+                    onMouseLeave={() => setMegaOpen(false)}
+                  >
+                    <Link
+                      href="/dich-vu"
+                      className={cn(
+                        "nav-link inline-flex items-center gap-1",
+                        pathname.startsWith("/dich-vu") && "nav-link-active"
+                      )}
+                    >
+                      {item.label}
+                      <span className="text-[7px] text-gold">▼</span>
+                    </Link>
+                    <div
+                      className={cn(
+                        "absolute left-1/2 top-full z-50 w-[560px] -translate-x-1/2 pt-4 transition-all duration-300",
+                        megaOpen
+                          ? "pointer-events-auto translate-y-0 opacity-100"
+                          : "pointer-events-none -translate-y-2 opacity-0"
+                      )}
+                    >
+                      <div className="grid grid-cols-2 gap-px overflow-hidden border border-white/10 bg-navy-mid/95 p-1 shadow-2xl backdrop-blur-xl">
+                        {services.map((s) => (
+                          <Link
+                            key={s.slug}
+                            href={`/dich-vu/${s.slug}`}
+                            className="group/item px-4 py-3.5 transition hover:bg-white/[0.04]"
+                          >
+                            <span className="block text-sm text-white/90 transition group-hover/item:text-gold">
+                              {s.title.replace(/^Tư vấn (pháp luật )?/, "")}
+                            </span>
+                            <span className="mt-0.5 block text-[11px] text-white/40 line-clamp-1">
+                              {s.short}
+                            </span>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
                   <Link
-                    href="/dich-vu"
+                    key={item.href}
+                    href={item.href}
                     className={cn(
-                      "nav-link inline-flex items-center gap-1.5",
-                      pathname.startsWith("/dich-vu") && "nav-link-active"
+                      "nav-link",
+                      pathname === item.href && "nav-link-active"
                     )}
                   >
                     {item.label}
-                    <span className="text-[8px] text-gold">▼</span>
                   </Link>
-                  <div
-                    className={cn(
-                      "absolute left-1/2 top-full z-50 w-[560px] -translate-x-1/2 pt-4 transition-all duration-300",
-                      megaOpen
-                        ? "pointer-events-auto translate-y-0 opacity-100"
-                        : "pointer-events-none -translate-y-2 opacity-0"
-                    )}
-                  >
-                    <div className="grid grid-cols-2 gap-px overflow-hidden border border-white/10 bg-navy-mid/95 p-1 shadow-2xl backdrop-blur-xl">
-                      {services.map((s) => (
-                        <Link
-                          key={s.slug}
-                          href={`/dich-vu/${s.slug}`}
-                          className="group/item px-4 py-3.5 transition hover:bg-white/[0.04]"
-                        >
-                          <span className="block text-sm text-white/90 transition group-hover/item:text-gold">
-                            {s.title.replace(/^Tư vấn (pháp luật )?/, "")}
-                          </span>
-                          <span className="mt-0.5 block text-[11px] text-white/40 line-clamp-1">
-                            {s.short}
-                          </span>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    "nav-link",
-                    pathname === item.href && "nav-link-active"
-                  )}
-                >
-                  {item.label}
-                </Link>
-              )
-            )}
+                )
+              )}
             </nav>
-          </div>
 
-          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-            <div className="hidden items-center gap-2 xl:flex xl:gap-3 2xl:gap-5">
-              <a
-                href={`tel:${siteConfig.phone.replace(/\s/g, "")}`}
-                className="flex items-center gap-2 text-[10px] uppercase tracking-[0.1em] text-white/70 transition hover:text-gold 2xl:text-[11px] 2xl:tracking-[0.12em]"
+            <div className="flex shrink-0 items-center gap-1.5 sm:gap-2 lg:gap-2.5">
+              <div className="hidden items-center gap-1.5 lg:flex lg:gap-2 xl:gap-3">
+                <a
+                  href={`tel:${siteConfig.phone.replace(/\s/g, "")}`}
+                  className="flex shrink-0 items-center gap-1.5 text-[9px] uppercase tracking-[0.08em] text-white/70 transition hover:text-gold lg:text-[10px] xl:tracking-[0.1em]"
+                >
+                  <Phone className="h-3.5 w-3.5 shrink-0" />
+                  <span className="hidden 2xl:inline">{siteConfig.phoneDisplay}</span>
+                </a>
+                <AuthNav light />
+                <Button variant="luxury" size="sm" asChild className="shrink-0 px-3 text-[10px]">
+                  <Link href="/dat-lich">Đặt lịch</Link>
+                </Button>
+              </div>
+
+              <button
+                type="button"
+                className="rounded p-2 text-white transition hover:text-gold lg:hidden"
+                onClick={() => setMobileOpen(true)}
+                aria-label="Mở menu"
               >
-                <Phone className="h-3.5 w-3.5 shrink-0" />
-                <span className="hidden 2xl:inline">{siteConfig.phoneDisplay}</span>
-              </a>
-              <AuthNav light />
-              <Button variant="luxury" size="sm" asChild className="shrink-0">
-                <Link href="/dat-lich">Đặt lịch</Link>
-              </Button>
+                <Menu className="h-6 w-6" />
+              </button>
             </div>
-
-            <button
-              type="button"
-              className="rounded p-2 text-white transition hover:text-gold xl:hidden"
-              onClick={() => setMobileOpen(true)}
-              aria-label="Mở menu"
-            >
-              <Menu className="h-6 w-6" />
-            </button>
           </div>
         </div>
       </header>

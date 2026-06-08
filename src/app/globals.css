@@ -18,8 +18,8 @@
   --ease-luxury: cubic-bezier(0.22, 1, 0.36, 1);
   --header-height: 10rem;
   --header-height-md: 12rem;
-  --header-bar-height: calc(10rem / 3 * 4 / 3);
-  --header-bar-height-md: calc(12rem / 3 * 4 / 3);
+  --header-bar-height: 4.25rem;
+  --header-bar-height-md: 4.75rem;
 }
 
 @media (min-width: 768px) {
@@ -161,7 +161,7 @@ body {
 
 /* Nav */
 .nav-link {
-  @apply relative text-[10px] font-medium uppercase tracking-[0.14em] text-white/85 transition-colors duration-300 hover:text-gold xl:text-[11px] xl:tracking-[0.18em];
+  @apply relative shrink-0 whitespace-nowrap text-[9px] font-medium uppercase tracking-[0.1em] text-white/85 transition-colors duration-300 hover:text-gold lg:text-[10px] lg:tracking-[0.12em] xl:tracking-[0.14em];
 }
 
 .nav-link::after {

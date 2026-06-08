@@ -37,13 +37,8 @@ export function Header() {
             : "bg-gradient-to-b from-navy-deep/80 to-transparent"
         )}
       >
-        <div className="container-premium relative flex h-[var(--header-bar-height)] items-center justify-between gap-2 px-3 sm:gap-3 sm:px-6 md:h-[var(--header-bar-height-md)] lg:px-8">
-          <Logo
-            priority
-            size="md"
-            className="absolute left-3 top-0 z-20 shrink-0 sm:left-6 lg:left-8"
-          />
-          <div className="w-40 shrink-0 md:w-48" aria-hidden />
+        <div className="container-premium flex h-[var(--header-bar-height)] items-center justify-between gap-2 px-3 sm:gap-3 sm:px-6 md:h-[var(--header-bar-height-md)] lg:px-8">
+          <Logo priority size="md" className="relative z-20 shrink-0" />
 
           <nav
             className="hidden flex-1 items-center justify-center gap-3 px-1 xl:flex xl:gap-5 2xl:gap-8"

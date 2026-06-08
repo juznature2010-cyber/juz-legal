@@ -41,7 +41,7 @@ export function Header() {
           <Logo
             priority
             size="md"
-            className="absolute left-3 top-1/2 z-20 shrink-0 -translate-y-1/2 sm:left-5 md:left-8 lg:left-10"
+            className="absolute left-3 top-[calc(50%+0.375rem)] z-20 shrink-0 -translate-y-1/2 sm:left-5 md:left-8 lg:left-10"
           />
 
           <div className="flex w-full min-w-0 items-center justify-end gap-2 pl-[10.5rem] sm:pl-[11rem] md:pl-[13rem] lg:gap-4 lg:pl-[14.5rem] xl:pl-[15.5rem]">

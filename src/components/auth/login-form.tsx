@@ -7,12 +7,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
-import { getDashboardPath, mapSupabaseAuthError, resolveUserRole } from "@/lib/auth-utils";
+import { mapSupabaseAuthError } from "@/lib/auth-utils";
+import {
+  getPostAuthPath,
+  getSafeCallbackUrl,
+  resolveUserRoleClient,
+} from "@/lib/auth-client";
 
 export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl");
+  const callbackUrl = getSafeCallbackUrl(searchParams.get("callbackUrl"));
   const supabase = useMemo(
     () => (isSupabaseConfigured() ? createClient() : null),
     []
@@ -22,6 +27,10 @@ export function LoginForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const registerHref = callbackUrl
+    ? `/dang-ky?callbackUrl=${encodeURIComponent(callbackUrl)}`
+    : "/dang-ky";
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -35,21 +44,27 @@ export function LoginForm() {
     }
 
     const { data, error: signInError } = await supabase.auth.signInWithPassword({
-      email,
+      email: email.trim(),
       password,
     });
 
-    setLoading(false);
-
     if (signInError) {
       setError(mapSupabaseAuthError(signInError.message));
+      setLoading(false);
       return;
     }
 
-    const role = data.user ? resolveUserRole(data.user) : "user";
-    const destination = callbackUrl ?? getDashboardPath(role);
+    if (!data.user) {
+      setError("Không thể xác thực tài khoản. Vui lòng thử lại.");
+      setLoading(false);
+      return;
+    }
+
+    const role = await resolveUserRoleClient(supabase, data.user);
+    const destination = getPostAuthPath(role, callbackUrl);
     router.push(destination);
     router.refresh();
+    setLoading(false);
   }
 
   return (
@@ -94,7 +109,10 @@ export function LoginForm() {
 
       <p className="text-center text-sm text-muted">
         Chưa có tài khoản?{" "}
-        <Link href="/dang-ky" className="font-medium text-navy underline-offset-4 hover:underline">
+        <Link
+          href={registerHref}
+          className="font-medium text-navy underline-offset-4 hover:underline"
+        >
           Đăng ký ngay
         </Link>
       </p>

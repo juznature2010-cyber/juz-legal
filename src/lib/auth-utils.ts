@@ -37,6 +37,9 @@ export function mapSupabaseAuthError(message: string) {
   if (lower.includes("invalid login credentials")) {
     return "Email hoặc mật khẩu không đúng.";
   }
+  if (lower.includes("email not confirmed")) {
+    return "Vui lòng xác nhận email trước khi đăng nhập.";
+  }
   if (lower.includes("user already registered")) {
     return "Email này đã được đăng ký.";
   }

@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { getDashboardPath, resolveUserRole } from "@/lib/auth-utils";
+import { getSafeCallbackUrl } from "@/lib/auth-client";
 import {
   getSupabaseEnv,
   isSupabaseConfigured,
@@ -74,7 +75,11 @@ export async function updateSession(request: NextRequest) {
   }
 
   if ((isLoginPage || isRegisterPage) && isLoggedIn) {
-    return NextResponse.redirect(new URL(getDashboardPath(role), request.url));
+    const callbackUrl = getSafeCallbackUrl(
+      request.nextUrl.searchParams.get("callbackUrl")
+    );
+    const destination = callbackUrl ?? getDashboardPath(role);
+    return NextResponse.redirect(new URL(destination, request.url));
   }
 
   return supabaseResponse;

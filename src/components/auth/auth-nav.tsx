@@ -6,6 +6,7 @@ import { LogIn, LogOut, LayoutDashboard, UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getDashboardPath } from "@/lib/auth-utils";
 import { useAuth } from "@/components/auth/auth-provider";
+import { signOutAndRedirect } from "@/lib/auth-client";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
@@ -92,10 +93,7 @@ export function AuthNav({ light = false }: { light?: boolean }) {
         </Button>
         <button
           type="button"
-          onClick={async () => {
-            await supabase.auth.signOut();
-            window.location.href = "/";
-          }}
+          onClick={() => signOutAndRedirect(supabase)}
           className={
             light
               ? "flex items-center gap-1.5 text-[11px] uppercase tracking-[0.12em] text-white/70 transition hover:text-gold"

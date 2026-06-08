@@ -1,16 +1,24 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { mapSupabaseAuthError } from "@/lib/auth-utils";
+import {
+  getPostAuthPath,
+  getSafeCallbackUrl,
+  isReservedAdminEmail,
+  resolveUserRoleClient,
+} from "@/lib/auth-client";
 
 export function RegisterForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = getSafeCallbackUrl(searchParams.get("callbackUrl"));
   const supabase = useMemo(
     () => (isSupabaseConfigured() ? createClient() : null),
     []
@@ -25,10 +33,21 @@ export function RegisterForm() {
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const loginHref = callbackUrl
+    ? `/dang-nhap?callbackUrl=${encodeURIComponent(callbackUrl)}`
+    : "/dang-nhap";
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
     setSuccess("");
+
+    const trimmedEmail = email.trim();
+
+    if (isReservedAdminEmail(trimmedEmail)) {
+      setError("Email này dành cho quản trị viên. Vui lòng dùng email khác.");
+      return;
+    }
 
     if (password.length < 8) {
       setError("Mật khẩu phải có ít nhất 8 ký tự.");
@@ -49,21 +68,19 @@ export function RegisterForm() {
     }
 
     const { data, error: signUpError } = await supabase.auth.signUp({
-      email,
+      email: trimmedEmail,
       password,
       options: {
         data: {
           full_name: name.trim(),
           phone: phone.trim() || null,
-          role: "user",
         },
       },
     });
 
-    setLoading(false);
-
     if (signUpError) {
       setError(mapSupabaseAuthError(signUpError.message));
+      setLoading(false);
       return;
     }
 
@@ -71,11 +88,20 @@ export function RegisterForm() {
       setSuccess(
         "Đăng ký thành công! Vui lòng kiểm tra email để xác nhận tài khoản, sau đó đăng nhập."
       );
+      setLoading(false);
       return;
     }
 
-    router.push("/tai-khoan");
-    router.refresh();
+    if (data.user && data.session) {
+      const role = await resolveUserRoleClient(supabase, data.user);
+      router.push(getPostAuthPath(role, callbackUrl));
+      router.refresh();
+      setLoading(false);
+      return;
+    }
+
+    setError("Không thể tạo tài khoản. Vui lòng thử lại.");
+    setLoading(false);
   }
 
   return (
@@ -156,7 +182,10 @@ export function RegisterForm() {
 
       {success && (
         <p className="rounded border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
-          {success}
+          {success}{" "}
+          <Link href={loginHref} className="font-medium text-navy underline">
+            Đăng nhập
+          </Link>
         </p>
       )}
 
@@ -166,7 +195,10 @@ export function RegisterForm() {
 
       <p className="text-center text-sm text-muted">
         Đã có tài khoản?{" "}
-        <Link href="/dang-nhap" className="font-medium text-navy underline-offset-4 hover:underline">
+        <Link
+          href={loginHref}
+          className="font-medium text-navy underline-offset-4 hover:underline"
+        >
           Đăng nhập
         </Link>
       </p>

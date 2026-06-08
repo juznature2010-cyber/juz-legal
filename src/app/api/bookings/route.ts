@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { getService, getTeamMember } from "@/lib/data";
-import { sendBookingNotification } from "@/lib/notify-email";
+import { sendNewBookingRequestNotification } from "@/lib/notify-email";
 
 export async function POST(request: Request) {
   try {
@@ -74,7 +74,7 @@ export async function POST(request: Request) {
       ? (getTeamMember(lawyerSlug)?.name ?? lawyerSlug)
       : null;
 
-    const emailResult = await sendBookingNotification({
+    const emailResult = await sendNewBookingRequestNotification({
       serviceTitle,
       lawyerName,
       bookingDate,
@@ -85,8 +85,10 @@ export async function POST(request: Request) {
       note,
     });
 
-    if (!emailResult.ok && !emailResult.skipped) {
-      console.error("[bookings] Dat lich da luu nhung gui mail that bai");
+    if (emailResult.ok) {
+      console.log("[bookings] Da gui mail thong bao dat lich moi, id=", emailResult.id);
+    } else if (!emailResult.skipped) {
+      console.error("[bookings] Dat lich da luu nhung gui mail that bai:", emailResult.error);
     }
 
     return NextResponse.json({ ok: true });

@@ -18,7 +18,7 @@ export function MobileMenu({
   return (
     <AnimatePresence>
       {open && (
-        <div className="fixed inset-0 z-[60] lg:hidden">
+        <div className="fixed inset-0 z-[60] xl:hidden">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -33,8 +33,8 @@ export function MobileMenu({
             transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
             className="absolute right-0 top-0 flex h-full w-full max-w-[min(100%,24rem)] flex-col border-l border-white/10 bg-navy-deep p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:max-w-md sm:p-8"
           >
-            <div className="flex items-center justify-between">
-              <Logo size="sm" />
+            <div className="flex items-center justify-between gap-3">
+              <Logo size="sm" className="min-w-0 shrink-0" />
               <button
                 type="button"
                 onClick={onClose}

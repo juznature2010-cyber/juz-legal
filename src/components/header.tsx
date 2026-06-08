@@ -37,10 +37,13 @@ export function Header() {
             : "bg-gradient-to-b from-navy-deep/80 to-transparent py-2"
         )}
       >
-        <div className="container-premium flex h-40 items-center justify-between gap-3 sm:gap-6 md:h-48">
-          <Logo priority size="md" />
+        <div className="container-premium flex min-h-40 items-center justify-between gap-2 px-3 sm:gap-3 sm:px-6 md:min-h-48 lg:px-8">
+          <Logo priority size="md" className="shrink-0" />
 
-          <nav className="hidden items-center gap-8 lg:flex" aria-label="Chính">
+          <nav
+            className="hidden flex-1 items-center justify-center gap-3 px-1 xl:flex xl:gap-5 2xl:gap-8"
+            aria-label="Chính"
+          >
             {mainNav.map((item) =>
               item.href === "/dich-vu" ? (
                 <div
@@ -100,28 +103,30 @@ export function Header() {
             )}
           </nav>
 
-          <div className="hidden items-center gap-4 lg:flex xl:gap-6">
-            <a
-              href={`tel:${siteConfig.phone.replace(/\s/g, "")}`}
-              className="flex items-center gap-2 text-[11px] uppercase tracking-[0.12em] text-white/70 transition hover:text-gold"
-            >
-              <Phone className="h-3.5 w-3.5" />
-              <span className="hidden xl:inline">{siteConfig.phoneDisplay}</span>
-            </a>
-            <AuthNav light />
-            <Button variant="luxury" size="sm" asChild>
-              <Link href="/dat-lich">Đặt lịch</Link>
-            </Button>
-          </div>
+          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+            <div className="hidden items-center gap-2 xl:flex xl:gap-3 2xl:gap-5">
+              <a
+                href={`tel:${siteConfig.phone.replace(/\s/g, "")}`}
+                className="flex items-center gap-2 text-[10px] uppercase tracking-[0.1em] text-white/70 transition hover:text-gold 2xl:text-[11px] 2xl:tracking-[0.12em]"
+              >
+                <Phone className="h-3.5 w-3.5 shrink-0" />
+                <span className="hidden 2xl:inline">{siteConfig.phoneDisplay}</span>
+              </a>
+              <AuthNav light />
+              <Button variant="luxury" size="sm" asChild className="shrink-0">
+                <Link href="/dat-lich">Đặt lịch</Link>
+              </Button>
+            </div>
 
-          <button
-            type="button"
-            className="rounded p-2 text-white transition hover:text-gold lg:hidden"
+            <button
+              type="button"
+              className="rounded p-2 text-white transition hover:text-gold xl:hidden"
             onClick={() => setMobileOpen(true)}
             aria-label="Mở menu"
           >
-            <Menu className="h-6 w-6" />
-          </button>
+              <Menu className="h-6 w-6" />
+            </button>
+          </div>
         </div>
       </header>
 

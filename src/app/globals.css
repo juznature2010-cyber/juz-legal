@@ -159,7 +159,7 @@ body {
 
 /* Nav */
 .nav-link {
-  @apply relative text-[11px] font-medium uppercase tracking-[0.18em] text-white/85 transition-colors duration-300 hover:text-gold;
+  @apply relative text-[10px] font-medium uppercase tracking-[0.14em] text-white/85 transition-colors duration-300 hover:text-gold xl:text-[11px] xl:tracking-[0.18em];
 }
 
 .nav-link::after {

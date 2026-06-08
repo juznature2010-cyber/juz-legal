@@ -43,8 +43,8 @@ export function PageBanner({
         className={cn(
           "relative z-10 w-full",
           "pb-10 pt-[calc(var(--header-height)+1.25rem)]",
-          "sm:pb-14 sm:pt-[calc(var(--header-height-md)+1.75rem)]",
-          "md:pb-16 md:pt-40 lg:pb-20"
+          "md:pb-14 md:pt-[calc(var(--header-height-md)+1.75rem)]",
+          "lg:pb-20"
         )}
       >
         <div className="container-premium">

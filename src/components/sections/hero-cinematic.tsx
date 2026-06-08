@@ -50,7 +50,7 @@ export function HeroCinematic() {
 
       <motion.div
         style={{ y: contentY, opacity }}
-        className="relative z-10 w-full pb-8 pt-[calc(var(--header-height)+1.5rem)] sm:pb-14 sm:pt-[calc(var(--header-height-md)+2rem)] md:pb-20 md:pt-40"
+        className="relative z-10 w-full pb-8 pt-[calc(var(--header-height)+1.5rem)] md:pb-14 md:pt-[calc(var(--header-height-md)+2rem)] lg:pb-20 lg:pt-40"
       >
         <div className="container-premium">
           <motion.div

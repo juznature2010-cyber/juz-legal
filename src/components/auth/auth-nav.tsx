@@ -41,7 +41,7 @@ export function AuthNav({ light = false }: { light?: boolean }) {
           variant={light ? "ghost-light" : "ghost"}
           size="sm"
           asChild
-          className="h-8 border-0 px-2.5 shadow-none sm:px-3"
+          className="h-8 border-0 px-2 shadow-none xl:px-2.5 2xl:px-3"
         >
           <Link href="/dang-ky">Đăng ký</Link>
         </Button>
@@ -56,7 +56,7 @@ export function AuthNav({ light = false }: { light?: boolean }) {
           variant={light ? "ghost-light" : "ghost"}
           size="sm"
           asChild
-          className="h-8 border-0 px-2.5 shadow-none sm:px-3"
+          className="h-8 border-0 px-2 shadow-none xl:px-2.5 2xl:px-3"
         >
           <Link href="/dang-nhap">
             <LogIn className="h-3.5 w-3.5" />
@@ -116,7 +116,7 @@ export function AuthNav({ light = false }: { light?: boolean }) {
         variant={light ? "ghost-light" : "ghost"}
         size="sm"
         asChild
-        className="h-8 border-0 px-2.5 shadow-none sm:px-3"
+        className="h-8 border-0 px-2 shadow-none xl:px-2.5 2xl:px-3"
       >
         <Link href="/dang-ky">Đăng ký</Link>
       </Button>
@@ -131,7 +131,7 @@ export function AuthNav({ light = false }: { light?: boolean }) {
         variant={light ? "ghost-light" : "ghost"}
         size="sm"
         asChild
-        className="h-8 border-0 px-2.5 shadow-none sm:px-3"
+        className="h-8 border-0 px-2 shadow-none xl:px-2.5 2xl:px-3"
       >
         <Link href="/dang-nhap">
           <LogIn className="h-3.5 w-3.5" />

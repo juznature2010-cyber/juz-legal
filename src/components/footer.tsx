@@ -10,8 +10,8 @@ export function Footer() {
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
       <div className="container-premium py-12 sm:py-16 md:py-20 lg:py-24">
         <div className="grid gap-10 sm:gap-12 lg:grid-cols-12 lg:gap-14">
-          <div className="lg:col-span-5">
-            <Logo href="/" size="lg" />
+          <div className="flex flex-col items-start lg:col-span-5">
+            <Logo href="/" size="lg" className="max-w-full shrink-0" />
             <p className="mt-2 text-[10px] uppercase tracking-[0.22em] text-white/40 sm:text-[11px] sm:tracking-[0.25em]">
               {siteConfig.legalName}
             </p>

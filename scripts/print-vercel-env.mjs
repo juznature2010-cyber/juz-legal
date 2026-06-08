@@ -29,7 +29,10 @@ for (const key of required) {
   }
 }
 
-console.log("\nNEXT_PUBLIC_GA_ID=G-NX6GE58D37  (tuy chon)\n");
+console.log("BOOKING_NOTIFY_EMAIL=juz.legal@gmail.com");
+console.log("RESEND_API_KEY=(lay tu resend.com → API Keys)");
+console.log("EMAIL_FROM=JUZ Legal <notifications@yourdomain.com>  (sau khi xac minh domain)\n");
+console.log("NEXT_PUBLIC_GA_ID=G-NX6GE58D37  (tuy chon)\n");
 console.log("Sau khi them → Deployments → Redeploy\n");
 console.log("=== Supabase Auth URL Configuration ===\n");
 console.log("Site URL:        https://www.juzlegal.com");

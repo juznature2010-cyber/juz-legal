@@ -1,8 +1,18 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/supabase/env";
+import { getService, getTeamMember } from "@/lib/data";
+import { sendBookingNotification } from "@/lib/notify-email";
 
 export async function POST(request: Request) {
   try {
+    if (!isSupabaseConfigured()) {
+      return NextResponse.json(
+        { error: "Hệ thống đặt lịch chưa được cấu hình. Vui lòng gọi hotline." },
+        { status: 503 }
+      );
+    }
+
     const body = await request.json();
     const serviceSlug = String(body.serviceSlug ?? "").trim();
     const lawyerSlug = String(body.lawyerSlug ?? "").trim() || null;
@@ -22,6 +32,14 @@ export async function POST(request: Request) {
 
     if (mode !== "online" && mode !== "office") {
       return NextResponse.json({ error: "Hình thức không hợp lệ." }, { status: 400 });
+    }
+
+    const today = new Date().toISOString().slice(0, 10);
+    if (bookingDate < today) {
+      return NextResponse.json(
+        { error: "Ngày đặt lịch không thể là ngày trong quá khứ." },
+        { status: 400 }
+      );
     }
 
     const supabase = await createClient();
@@ -48,6 +66,22 @@ export async function POST(request: Request) {
         { status: 500 }
       );
     }
+
+    const serviceTitle = getService(serviceSlug)?.title ?? serviceSlug;
+    const lawyerName = lawyerSlug
+      ? (getTeamMember(lawyerSlug)?.name ?? lawyerSlug)
+      : null;
+
+    void sendBookingNotification({
+      serviceTitle,
+      lawyerName,
+      bookingDate,
+      bookingTime,
+      mode: mode as "online" | "office",
+      clientName,
+      clientPhone,
+      note,
+    });
 
     return NextResponse.json({ ok: true });
   } catch {

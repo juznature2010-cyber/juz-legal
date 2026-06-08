@@ -1,0 +1,116 @@
+import { siteConfig } from "@/lib/site";
+
+type SendEmailInput = {
+  subject: string;
+  html: string;
+  text: string;
+};
+
+function getNotifyEmail() {
+  return (
+    process.env.BOOKING_NOTIFY_EMAIL ??
+    process.env.CONTACT_NOTIFY_EMAIL ??
+    siteConfig.bookingNotifyEmail
+  );
+}
+
+function getFromEmail() {
+  return (
+    process.env.EMAIL_FROM ?? "JUZ Legal <onboarding@resend.dev>"
+  );
+}
+
+export async function sendNotificationEmail(input: SendEmailInput) {
+  const apiKey = process.env.RESEND_API_KEY?.trim();
+  const to = getNotifyEmail();
+
+  if (!apiKey) {
+    console.warn(
+      "[notify-email] RESEND_API_KEY chưa cấu hình — bỏ qua gửi mail tới",
+      to
+    );
+    return { ok: false, skipped: true as const };
+  }
+
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: getFromEmail(),
+      to: [to],
+      subject: input.subject,
+      html: input.html,
+      text: input.text,
+    }),
+  });
+
+  if (!res.ok) {
+    const detail = await res.text();
+    console.error("[notify-email] Gửi mail thất bại:", res.status, detail);
+    return { ok: false, skipped: false as const };
+  }
+
+  return { ok: true, skipped: false as const };
+}
+
+export type BookingEmailPayload = {
+  serviceTitle: string;
+  lawyerName: string | null;
+  bookingDate: string;
+  bookingTime: string;
+  mode: "online" | "office";
+  clientName: string;
+  clientPhone: string;
+  note: string | null;
+};
+
+export async function sendBookingNotification(payload: BookingEmailPayload) {
+  const modeLabel = payload.mode === "online" ? "Trực tuyến" : "Tại văn phòng";
+  const timeShort = payload.bookingTime.slice(0, 5);
+
+  const lines = [
+    "Có yêu cầu đặt lịch tư vấn mới trên website JUZ Legal.",
+    "",
+    `Khách hàng: ${payload.clientName}`,
+    `Điện thoại: ${payload.clientPhone}`,
+    `Dịch vụ: ${payload.serviceTitle}`,
+    payload.lawyerName ? `Luật sư: ${payload.lawyerName}` : null,
+    `Ngày giờ: ${payload.bookingDate} ${timeShort}`,
+    `Hình thức: ${modeLabel}`,
+    payload.note ? `Ghi chú: ${payload.note}` : null,
+    "",
+    `Xem trong admin: ${siteConfig.url}/admin/dat-lich`,
+  ].filter(Boolean);
+
+  const text = lines.join("\n");
+  const html = `
+    <h2>Đặt lịch tư vấn mới — JUZ Legal</h2>
+    <ul>
+      <li><strong>Khách hàng:</strong> ${escapeHtml(payload.clientName)}</li>
+      <li><strong>Điện thoại:</strong> ${escapeHtml(payload.clientPhone)}</li>
+      <li><strong>Dịch vụ:</strong> ${escapeHtml(payload.serviceTitle)}</li>
+      ${payload.lawyerName ? `<li><strong>Luật sư:</strong> ${escapeHtml(payload.lawyerName)}</li>` : ""}
+      <li><strong>Ngày giờ:</strong> ${escapeHtml(payload.bookingDate)} ${escapeHtml(timeShort)}</li>
+      <li><strong>Hình thức:</strong> ${escapeHtml(modeLabel)}</li>
+      ${payload.note ? `<li><strong>Ghi chú:</strong> ${escapeHtml(payload.note)}</li>` : ""}
+    </ul>
+    <p><a href="${siteConfig.url}/admin/dat-lich">Mở bảng quản trị đặt lịch</a></p>
+  `;
+
+  return sendNotificationEmail({
+    subject: `[JUZ Legal] Đặt lịch mới — ${payload.clientName}`,
+    text,
+    html,
+  });
+}
+
+function escapeHtml(value: string) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}

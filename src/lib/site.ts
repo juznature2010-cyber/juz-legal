@@ -11,7 +11,8 @@ export const siteConfig = {
   locale: "vi_VN",
   phone: "1900633266",
   phoneDisplay: "1900 633 266",
-  email: "juz.legal2010@gmail.com",
+  email: "juz.legal@gmail.com",
+  bookingNotifyEmail: "juz.legal@gmail.com",
   address: "Tầng 6, Tòa nhà IMC, Quận 3, Hồ Chí Minh",
   workingHours: "Thứ 2 – Thứ 6: 8:00 – 18:00 | Thứ 7: 8:00 – 12:00",
   mapEmbed:

@@ -7,10 +7,15 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { services, team } from "@/lib/data";
 
+function todayInputValue() {
+  return new Date().toISOString().slice(0, 10);
+}
+
 export function BookingForm() {
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const minDate = todayInputValue();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -49,7 +54,8 @@ export function BookingForm() {
       <div className="rounded-lg border border-gold/30 bg-gold/5 p-8 text-center">
         <p className="font-serif text-xl text-navy">Đặt lịch thành công</p>
         <p className="mt-2 text-muted">
-          Chúng tôi sẽ xác nhận lịch hẹn qua điện thoại hoặc email.
+          Chúng tôi đã nhận yêu cầu và sẽ xác nhận lịch hẹn qua điện thoại hoặc email
+          trong thời gian sớm nhất.
         </p>
       </div>
     );
@@ -91,7 +97,14 @@ export function BookingForm() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <Label htmlFor="date">Ngày *</Label>
-          <Input id="date" name="date" type="date" required className="mt-1.5" />
+          <Input
+            id="date"
+            name="date"
+            type="date"
+            required
+            min={minDate}
+            className="mt-1.5"
+          />
         </div>
         <div>
           <Label htmlFor="time">Giờ *</Label>

@@ -44,16 +44,16 @@ export function Header() {
             className="absolute left-3 top-1/2 z-20 shrink-0 -translate-y-1/2 sm:left-5 md:left-8 lg:left-10"
           />
 
-          <div className="flex w-full min-w-0 items-center justify-end gap-2 pl-[10.5rem] sm:pl-[11rem] md:pl-[13rem] lg:justify-between lg:pl-[14.5rem] xl:pl-[15.5rem]">
+          <div className="flex w-full min-w-0 items-center justify-end gap-2 pl-[10.5rem] sm:pl-[11rem] md:pl-[13rem] lg:gap-4 lg:pl-[14.5rem] xl:pl-[15.5rem]">
             <nav
-              className="hidden min-w-0 flex-1 flex-nowrap items-center justify-start gap-2 overflow-hidden lg:flex lg:gap-2.5 xl:gap-3 2xl:gap-4"
+              className="hidden min-w-0 flex-1 grid-cols-6 items-center lg:grid"
               aria-label="Chính"
             >
               {mainNav.map((item) =>
                 item.href === "/dich-vu" ? (
                   <div
                     key={item.href}
-                    className="relative shrink-0"
+                    className="relative flex justify-center"
                     onMouseEnter={() => setMegaOpen(true)}
                     onMouseLeave={() => setMegaOpen(false)}
                   >
@@ -94,16 +94,17 @@ export function Header() {
                     </div>
                   </div>
                 ) : (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={cn(
-                      "nav-link",
-                      pathname === item.href && "nav-link-active"
-                    )}
-                  >
-                    {item.label}
-                  </Link>
+                  <div key={item.href} className="flex justify-center">
+                    <Link
+                      href={item.href}
+                      className={cn(
+                        "nav-link",
+                        pathname === item.href && "nav-link-active"
+                      )}
+                    >
+                      {item.label}
+                    </Link>
+                  </div>
                 )
               )}
             </nav>

@@ -1,17 +1,21 @@
-import pg from "pg";
-import { readFileSync } from "fs";
+import { requireEnv, withPg } from "./lib/env.mjs";
 
-const url = "https://ssnaglboujsbmjnkguhr.supabase.co";
-const key = "sb_publishable_xdul51MMNOIXKTPNVGyDqQ_vTrA0ClT";
-const adminEmail = "admin@juzlegal.vn";
-const adminPassword = "Huyen12345@123";
+const env = requireEnv([
+  "NEXT_PUBLIC_SUPABASE_URL",
+  "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+  "SUPABASE_DB_PASSWORD",
+  "ADMIN_EMAIL",
+]);
 
-const env = {};
-for (const line of readFileSync(".env.local", "utf8").split("\n")) {
-  const t = line.trim();
-  if (!t || t.startsWith("#")) continue;
-  const i = t.indexOf("=");
-  if (i > 0) env[t.slice(0, i)] = t.slice(i + 1);
+const url = env.NEXT_PUBLIC_SUPABASE_URL.replace(/\/$/, "");
+const key = env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const adminEmail = env.ADMIN_EMAIL.toLowerCase();
+const adminPassword = process.env.ADMIN_PASSWORD ?? env.ADMIN_PASSWORD;
+
+if (!adminPassword) {
+  console.error("[LOI] Thieu ADMIN_PASSWORD (dat tam trong .env.local hoac bien moi truong)");
+  console.error("     Vi du: ADMIN_PASSWORD=MatKhauManh123!");
+  process.exit(1);
 }
 
 async function auth(path, body) {
@@ -27,48 +31,69 @@ async function auth(path, body) {
   return { ok: res.ok, data: await res.json() };
 }
 
-async function dbQuery(text, params) {
-  const client = new pg.Client({
-    connectionString: `postgresql://postgres.ssnaglboujsbmjnkguhr:${encodeURIComponent(env.SUPABASE_DB_PASSWORD)}@aws-1-ap-southeast-1.pooler.supabase.com:5432/postgres`,
-    ssl: { rejectUnauthorized: false },
+const recreate = process.env.RECREATE_ADMIN === "1" || process.argv.includes("--recreate");
+
+console.log("\n=== Tao / cap nhat tai khoan admin ===\n");
+
+if (recreate) {
+  console.log("Xoa tai khoan admin cu (neu co)...");
+  await withPg(env.SUPABASE_DB_PASSWORD, async (client) => {
+    const { rowCount } = await client.query(
+      "delete from auth.users where lower(email) = $1",
+      [adminEmail]
+    );
+    console.log(rowCount ? "[OK] Da xoa admin cu" : "[OK] Khong co admin cu");
   });
-  await client.connect();
-  const result = await client.query(text, params);
-  await client.end();
-  return result;
 }
 
-console.log("Xoa admin cu (neu co)...");
-await dbQuery("delete from auth.users where email = $1", [adminEmail]);
-
-console.log("Tao admin moi qua Supabase Auth API...");
 const signup = await auth("signup", {
   email: adminEmail,
   password: adminPassword,
-  data: { full_name: "Quản trị viên", role: "admin" },
+  data: { full_name: "Quản trị viên" },
 });
 
+let userId = signup.data.user?.id ?? signup.data.id;
+
 if (!signup.ok && !signup.data.access_token) {
-  console.error("[LOI] Signup admin:", signup.data);
-  process.exit(1);
+  const login = await auth("token?grant_type=password", {
+    email: adminEmail,
+    password: adminPassword,
+  });
+  if (!login.ok) {
+    console.error("[LOI] Khong tao/dang nhap admin:", signup.data);
+    process.exit(1);
+  }
+  userId = login.data.user?.id;
+  console.log("[OK] Admin da ton tai, cap nhat role...");
+} else {
+  console.log("[OK] Tao admin moi thanh cong");
 }
 
-const userId = signup.data.user?.id ?? signup.data.id;
 if (userId) {
-  await dbQuery(
-    "update public.profiles set role = 'admin', full_name = 'Quản trị viên' where id = $1",
-    [userId]
-  );
+  await withPg(env.SUPABASE_DB_PASSWORD, async (client) => {
+    await client.query(
+      `update public.profiles
+       set role = 'admin', full_name = 'Quản trị viên', updated_at = now()
+       where id = $1`,
+      [userId]
+    );
+  });
 }
 
-const login = await auth("token?grant_type=password", {
+const verify = await auth("token?grant_type=password", {
   email: adminEmail,
   password: adminPassword,
 });
 
-if (login.ok) {
-  console.log("[OK] Admin san sang: admin@juzlegal.vn");
+if (verify.ok) {
+  console.log(`[OK] Admin san sang: ${adminEmail}`);
+  if (recreate) {
+    console.log(`[MAT KHAU MOI] ${adminPassword}`);
+    console.log("     Luu mat khau nay — chi hien mot lan.");
+  }
 } else {
-  console.error("[LOI] Login admin:", login.data);
+  console.error("[LOI] Xac minh dang nhap that bai:", verify.data);
   process.exit(1);
 }
+
+console.log("\n[DONE]\n");

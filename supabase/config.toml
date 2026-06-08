@@ -11,9 +11,9 @@ major_version = 15
 
 [auth]
 enabled = true
-site_url = "https://juzlegal.com"
+site_url = "https://www.juzlegal.com"
 additional_redirect_urls = [
-  "http://localhost:5173/**",
-  "https://juzlegal.com/**",
-  "https://www.juzlegal.com/**"
+  "http://localhost:5173/*",
+  "https://juzlegal.com/*",
+  "https://www.juzlegal.com/*"
 ]

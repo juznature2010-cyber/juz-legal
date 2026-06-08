@@ -10,7 +10,7 @@ export function resolveUserRole(user: User, profileRole?: string): UserRole {
   if (adminEmail && user.email?.toLowerCase() === adminEmail) {
     return "admin";
   }
-  if (profileRole === "admin" || user.user_metadata?.role === "admin") {
+  if (profileRole === "admin") {
     return "admin";
   }
   return "user";

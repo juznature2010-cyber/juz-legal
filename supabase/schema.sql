@@ -57,24 +57,20 @@ as $$
   );
 $$;
 
--- 5. Tự tạo profile khi đăng ký
+-- 5. Tự tạo profile khi đăng ký (luôn role = user; admin gán thủ công)
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
 security definer
 set search_path = public
 as $$
-declare
-  user_role text;
 begin
-  user_role := coalesce(new.raw_user_meta_data ->> 'role', 'user');
-
   insert into public.profiles (id, full_name, phone, role)
   values (
     new.id,
     new.raw_user_meta_data ->> 'full_name',
     new.raw_user_meta_data ->> 'phone',
-    user_role
+    'user'
   )
   on conflict (id) do update set
     full_name = excluded.full_name,
@@ -101,7 +97,13 @@ create policy "Users view own profile"
 drop policy if exists "Users update own profile" on public.profiles;
 create policy "Users update own profile"
   on public.profiles for update
-  using (auth.uid() = id);
+  using (auth.uid() = id)
+  with check (
+    public.is_admin()
+    or role = (
+      select p.role from public.profiles p where p.id = auth.uid()
+    )
+  );
 
 -- 7. RLS — CONTACT MESSAGES
 alter table public.contact_messages enable row level security;

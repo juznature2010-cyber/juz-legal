@@ -65,3 +65,12 @@ export function formatBookingStatus(status: string) {
   };
   return map[status] ?? status;
 }
+
+export function formatContactStatus(status: string) {
+  const map: Record<string, string> = {
+    new: "Mới",
+    read: "Đã đọc",
+    replied: "Đã phản hồi",
+  };
+  return map[status] ?? status;
+}

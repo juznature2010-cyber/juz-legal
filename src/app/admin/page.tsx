@@ -1,26 +1,22 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import {
   Calendar,
   FileText,
   Mail,
-  Settings,
   Users,
   ArrowUpRight,
 } from "lucide-react";
-import { getUser } from "@/lib/supabase/server";
+import { requireAdminPage } from "@/lib/admin-auth";
 import { getUserDisplayName } from "@/lib/auth-utils";
-import { resolveUserRoleServer } from "@/lib/auth-server";
+import { enrichBookings } from "@/lib/admin-data";
 import {
   getAdminStats,
   getRecentBookings,
   getRecentContacts,
 } from "@/lib/supabase/queries";
-import {
-  AdminStats,
-  RecentBookings,
-  RecentContacts,
-} from "@/components/admin/admin-dashboard";
+import { AdminStats } from "@/components/admin/admin-dashboard";
+import { AdminBookingsList } from "@/components/admin/admin-bookings-list";
+import { AdminContactsList } from "@/components/admin/admin-contacts-list";
 import { PageBanner } from "@/components/sections/page-banner";
 import { Button } from "@/components/ui/button";
 import { createMetadata } from "@/lib/seo";
@@ -35,40 +31,38 @@ export const metadata = createMetadata({
 
 const quickLinks = [
   {
+    title: "Đặt lịch tư vấn",
+    desc: "Xem và cập nhật trạng thái đặt lịch",
+    href: "/admin/dat-lich",
+    icon: Calendar,
+  },
+  {
+    title: "Liên hệ khách hàng",
+    desc: "Đọc và phản hồi tin nhắn liên hệ",
+    href: "/admin/lien-he",
+    icon: Mail,
+  },
+  {
     title: "Nội dung website",
-    desc: "Chỉnh dịch vụ, đội ngũ, blog trong data.ts",
+    desc: "Xem trang dịch vụ trên website",
     href: "/dich-vu",
     icon: FileText,
   },
   {
-    title: "Đặt lịch tư vấn",
-    desc: "Xem form đặt lịch trên website",
-    href: "/dat-lich",
-    icon: Calendar,
-  },
-  {
-    title: "Liên hệ",
-    desc: "Form liên hệ từ khách hàng",
-    href: "/lien-he",
-    icon: Mail,
-  },
-  {
     title: "Đội ngũ",
-    desc: "Quản lý thông tin luật sư",
+    desc: "Xem trang đội ngũ trên website",
     href: "/doi-ngu",
     icon: Users,
   },
 ] as const;
 
 export default async function AdminPage() {
-  const user = await getUser();
-  if (!user) redirect("/dang-nhap");
-  if ((await resolveUserRoleServer(user)) !== "admin") redirect("/tai-khoan");
+  const user = await requireAdminPage();
 
   const [stats, bookings, contacts] = await Promise.all([
     getAdminStats(),
-    getRecentBookings(5),
-    getRecentContacts(5),
+    enrichBookings(await getRecentBookings(8)),
+    getRecentContacts(8),
   ]);
 
   return (
@@ -110,25 +104,20 @@ export default async function AdminPage() {
           </div>
 
           <div className="mt-10 grid gap-6 lg:grid-cols-2">
-            <RecentBookings bookings={bookings} />
-            <RecentContacts contacts={contacts} />
+            <AdminBookingsList bookings={bookings} compact showViewAll />
+            <AdminContactsList contacts={contacts} compact showViewAll />
           </div>
 
           <div className="mt-10 rounded-lg border border-navy/10 bg-surface p-6 sm:p-8">
-            <div className="flex items-start gap-4">
-              <Settings className="mt-0.5 h-5 w-5 shrink-0 text-gold" />
-              <div>
-                <h3 className="font-serif text-xl text-navy">Supabase</h3>
-                <ul className="mt-3 space-y-2 text-sm text-muted">
-                  <li>• Quản lý user: Dashboard → Authentication</li>
-                  <li>• Xem dữ liệu: Dashboard → Table Editor</li>
-                  <li>• Schema SQL: <code className="text-navy">supabase/schema.sql</code></li>
-                </ul>
-                <Button variant="outline" size="sm" className="mt-4" asChild>
-                  <Link href="/">Xem website</Link>
-                </Button>
-              </div>
-            </div>
+            <h3 className="font-serif text-xl text-navy">Hướng dẫn nhanh</h3>
+            <ul className="mt-3 space-y-2 text-sm text-muted">
+              <li>• Chọn trạng thái trong danh sách để cập nhật đặt lịch hoặc liên hệ ngay trên trang.</li>
+              <li>• Vào Đặt lịch tư vấn hoặc Liên hệ để lọc theo trạng thái.</li>
+              <li>• Quản lý tài khoản: Supabase Dashboard → Authentication.</li>
+            </ul>
+            <Button variant="outline" size="sm" className="mt-4" asChild>
+              <Link href="/">Xem website</Link>
+            </Button>
           </div>
         </div>
       </section>

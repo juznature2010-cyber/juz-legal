@@ -3,11 +3,6 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getDashboardPath, resolveUserRole } from "@/lib/auth-utils";
 import { getSafeCallbackUrl } from "@/lib/auth-client";
 import {
-  getLocaleFromPathname,
-  stripLocalePrefix,
-  withLocalePath,
-} from "@/i18n/locale";
-import {
   getSupabaseEnv,
   isSupabaseConfigured,
 } from "@/lib/supabase/env";
@@ -54,35 +49,28 @@ export async function updateSession(request: NextRequest) {
   }
 
   const pathname = request.nextUrl.pathname;
-  const locale = getLocaleFromPathname(pathname);
-  const path = stripLocalePrefix(pathname);
   const isLoggedIn = !!user;
   const role = user ? resolveUserRole(user, profileRole) : undefined;
 
-  const isAdminRoute = path.startsWith("/admin");
-  const isAccountRoute = path.startsWith("/tai-khoan");
-  const isLoginPage = path === "/dang-nhap";
-  const isRegisterPage = path === "/dang-ky";
+  const isAdminRoute = pathname.startsWith("/admin");
+  const isAccountRoute = pathname.startsWith("/tai-khoan");
+  const isLoginPage = pathname === "/dang-nhap";
+  const isRegisterPage = pathname === "/dang-ky";
 
   if (isAdminRoute) {
     if (!isLoggedIn) {
-      const loginUrl = new URL(withLocalePath("/dang-nhap", locale), request.url);
+      const loginUrl = new URL("/dang-nhap", request.url);
       loginUrl.searchParams.set("callbackUrl", pathname);
       return NextResponse.redirect(loginUrl);
     }
     if (role !== "admin") {
-      return NextResponse.redirect(
-        new URL(withLocalePath("/tai-khoan", locale), request.url)
-      );
+      return NextResponse.redirect(new URL("/tai-khoan", request.url));
     }
   }
 
   if (isAccountRoute && !isLoggedIn) {
-    const loginUrl = new URL(withLocalePath("/dang-nhap", locale), request.url);
-    loginUrl.searchParams.set(
-      "callbackUrl",
-      withLocalePath("/tai-khoan", locale)
-    );
+    const loginUrl = new URL("/dang-nhap", request.url);
+    loginUrl.searchParams.set("callbackUrl", "/tai-khoan");
     return NextResponse.redirect(loginUrl);
   }
 

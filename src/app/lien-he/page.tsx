@@ -1,37 +1,22 @@
-import { setRequestLocale } from "next-intl/server";
 import { createMetadata } from "@/lib/seo";
 import { PageBanner } from "@/components/sections/page-banner";
 import { ContactForm } from "@/components/sections/contact-form";
 import { siteConfig } from "@/lib/site";
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
-import { getPageMeta } from "@/lib/i18n-page";
 
-type Props = { params: Promise<{ locale: string }> };
+export const metadata = createMetadata({
+  title: "Liên hệ",
+  description: "Liên hệ JUZ Legal — hotline, email, địa chỉ văn phòng và form liên hệ.",
+  path: "/lien-he",
+});
 
-export async function generateMetadata({ params }: Props) {
-  const { locale } = await params;
-  const { t } = await getPageMeta("pages.contactPage");
-  return createMetadata({
-    title: t("title"),
-    description: t("description"),
-    path: "/lien-he",
-    locale,
-  });
-}
-
-export default async function ContactPage({ params }: Props) {
-  const { locale } = await params;
-  setRequestLocale(locale);
-  const { t } = await getPageMeta("contact");
-  const { t: tNav } = await getPageMeta("nav");
-  const { t: tSite } = await getPageMeta("site");
-
+export default function ContactPage() {
   return (
     <>
       <PageBanner
-        eyebrow={tNav("contact")}
-        title={t("title")}
-        subtitle={t("subtitle")}
+        eyebrow="Liên hệ"
+        title="Liên hệ JUZ Legal"
+        subtitle="Chúng tôi sẵn sàng lắng nghe và phản hồi trong thời gian sớm nhất."
         image="contact"
       />
       <section className="section-premium bg-ivory">
@@ -41,7 +26,7 @@ export default async function ContactPage({ params }: Props) {
               <div className="flex gap-4">
                 <MapPin className="h-5 w-5 shrink-0 text-gold" />
                 <div>
-                  <p className="font-medium">{t("address")}</p>
+                  <p className="font-medium">Địa chỉ</p>
                   <p className="text-muted">{siteConfig.address}</p>
                 </div>
               </div>
@@ -58,7 +43,10 @@ export default async function ContactPage({ params }: Props) {
                 <Mail className="h-5 w-5 shrink-0 text-gold" />
                 <div>
                   <p className="font-medium">Email</p>
-                  <a href={`mailto:${siteConfig.email}`} className="text-muted hover:text-gold">
+                  <a
+                    href={`mailto:${siteConfig.email}`}
+                    className="text-muted hover:text-gold"
+                  >
                     {siteConfig.email}
                   </a>
                 </div>
@@ -66,13 +54,25 @@ export default async function ContactPage({ params }: Props) {
               <div className="flex gap-4">
                 <Clock className="h-5 w-5 shrink-0 text-gold" />
                 <div>
-                  <p className="font-medium">{t("hours")}</p>
-                  <p className="text-muted">{tSite("workingHours")}</p>
+                  <p className="font-medium">Giờ làm việc</p>
+                  <p className="text-muted">{siteConfig.workingHours}</p>
                 </div>
               </div>
+              <div className="aspect-video min-h-[200px] overflow-hidden border border-navy/10 sm:min-h-0">
+                <iframe
+                  title="Bản đồ văn phòng JUZ Legal"
+                  src={siteConfig.mapEmbed}
+                  className="h-full w-full border-0"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
             </div>
-            <div className="card-luxury p-5 sm:p-8 md:p-10">
-              <ContactForm />
+            <div className="card-luxury p-10">
+              <h2 className="font-display text-xl text-navy">Gửi tin nhắn</h2>
+              <div className="mt-6">
+                <ContactForm />
+              </div>
             </div>
           </div>
         </div>

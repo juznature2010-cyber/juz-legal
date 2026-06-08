@@ -1,15 +1,12 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
+import Link from "next/link";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { getLocaleData } from "@/lib/locale-data";
-import type { Locale } from "@/i18n/routing";
-import { Link } from "@/i18n/navigation";
+import { mainNav, services } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { AuthNav } from "@/components/auth/auth-nav";
 import { Logo } from "@/components/logo";
-import { LocaleSwitcher } from "@/components/locale-switcher";
 
 export function MobileMenu({
   open,
@@ -18,12 +15,6 @@ export function MobileMenu({
   open: boolean;
   onClose: () => void;
 }) {
-  const locale = useLocale() as Locale;
-  const { mainNav, services } = getLocaleData(locale);
-  const t = useTranslations("header");
-  const tFooter = useTranslations("footer");
-  const tCommon = useTranslations("common");
-
   return (
     <AnimatePresence>
       {open && (
@@ -48,15 +39,12 @@ export function MobileMenu({
                 type="button"
                 onClick={onClose}
                 className="text-white/70 hover:text-gold"
-                aria-label={t("closeMenu")}
+                aria-label="Đóng"
               >
                 <X className="h-6 w-6" />
               </button>
             </div>
-            <div className="mt-6">
-              <LocaleSwitcher />
-            </div>
-            <nav className="mt-8 flex flex-1 flex-col gap-1 overflow-y-auto">
+            <nav className="mt-12 flex flex-1 flex-col gap-1 overflow-y-auto">
               {mainNav.map((item) => (
                 <Link
                   key={item.href}
@@ -68,7 +56,7 @@ export function MobileMenu({
                 </Link>
               ))}
               <p className="mt-8 text-[10px] uppercase tracking-[0.3em] text-white/30">
-                {tFooter("services")}
+                Dịch vụ
               </p>
               {services.map((s) => (
                 <Link
@@ -85,7 +73,7 @@ export function MobileMenu({
               <AuthNav light />
               <Button variant="luxury" className="w-full" asChild>
                 <Link href="/dat-lich" onClick={onClose}>
-                  {tCommon("bookConsultation")}
+                  Đặt lịch tư vấn
                 </Link>
               </Button>
             </div>

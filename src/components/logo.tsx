@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Link } from "@/i18n/navigation";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { siteConfig } from "@/lib/site";
 

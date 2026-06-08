@@ -1,18 +1,11 @@
 import type { Metadata } from "next";
 import { siteConfig } from "./site";
 
-const ogLocales: Record<string, string> = {
-  vi: "vi_VN",
-  en: "en_US",
-  zh: "zh_CN",
-};
-
 type MetaOpts = {
   title: string;
   description?: string;
   path?: string;
   noIndex?: boolean;
-  locale?: string;
 };
 
 export function createMetadata({
@@ -20,7 +13,6 @@ export function createMetadata({
   description = siteConfig.description,
   path = "",
   noIndex = false,
-  locale = "vi",
 }: MetaOpts): Metadata {
   const fullTitle =
     title === siteConfig.name ? title : `${title} | ${siteConfig.name}`;
@@ -40,7 +32,7 @@ export function createMetadata({
       description,
       url,
       siteName: siteConfig.name,
-      locale: ogLocales[locale] ?? siteConfig.locale,
+      locale: siteConfig.locale,
       type: "website",
       images: [{ url: siteConfig.ogImage, width: 1200, height: 630, alt: siteConfig.name }],
     },

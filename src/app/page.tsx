@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useLocale, useTranslations } from "next-intl";
+import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FadeIn, Stagger, StaggerItem } from "@/components/motion";
@@ -12,29 +12,20 @@ import { TestimonialsSlider } from "@/components/sections/testimonials";
 import { FaqSection } from "@/components/sections/faq-section";
 import { BookingForm } from "@/components/sections/booking-form";
 import { ContactForm } from "@/components/sections/contact-form";
-import { getLocaleData } from "@/lib/locale-data";
-import type { Locale } from "@/i18n/routing";
-import { Link } from "@/i18n/navigation";
+import {
+  practiceAreas,
+  whyUs,
+  workProcess,
+  team,
+  clients,
+  blogPosts,
+  homeFaq,
+  companyIntro,
+} from "@/lib/data";
 import { images } from "@/lib/images";
 import { siteConfig } from "@/lib/site";
 
 export default function HomePage() {
-  const locale = useLocale() as Locale;
-  const t = useTranslations("home");
-  const tCommon = useTranslations("common");
-  const tContact = useTranslations("contact");
-  const tSite = useTranslations("site");
-  const {
-    practiceAreas,
-    whyUs,
-    workProcess,
-    team,
-    clients,
-    blogPosts,
-    homeFaq,
-    companyIntro,
-  } = getLocaleData(locale);
-
   return (
     <>
       <HeroCinematic />
@@ -55,9 +46,9 @@ export default function HomePage() {
             </div>
             <div>
               <SectionHeading
-                eyebrow={t("introEyebrow")}
+                eyebrow="Giới thiệu"
                 title={companyIntro.title}
-                subtitle={t("introSubtitle")}
+                subtitle="Đối tác chiến lược, người đồng hành tin cậy trên hành trình chinh phục thành công và bảo vệ quyền lợi hợp pháp của bạn tại Việt Nam."
               />
               <p className="mt-8 text-base leading-relaxed text-muted">
                 {companyIntro.lead}
@@ -67,7 +58,7 @@ export default function HomePage() {
               </p>
               <Button variant="outline" className="mt-10" asChild>
                 <Link href="/gioi-thieu">
-                  {tCommon("aboutUs")} <ArrowRight className="h-4 w-4" />
+                  Về chúng tôi <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
             </div>
@@ -78,9 +69,9 @@ export default function HomePage() {
       <section className="section-premium border-y border-navy/[0.04] bg-white">
         <div className="container-premium">
           <SectionHeading
-            eyebrow={t("practiceEyebrow")}
-            title={t("practiceTitle")}
-            subtitle={t("practiceSubtitle")}
+            eyebrow="Thực hành"
+            title="Lĩnh vực hoạt động"
+            subtitle="Bảy nhóm dịch vụ pháp lý trọng tâm — kiến thức chuyên sâu và phương pháp tiếp cận thống nhất."
             align="center"
           />
           <Stagger className="mt-10 grid gap-px bg-navy/[0.06] sm:mt-14 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3">
@@ -102,7 +93,7 @@ export default function HomePage() {
                   </h3>
                   <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">{a.short}</p>
                   <span className="mt-8 text-[10px] font-semibold uppercase tracking-[0.2em] text-gold opacity-0 transition group-hover:opacity-100">
-                    {tCommon("explore")}
+                    Khám phá
                   </span>
                 </Link>
               </StaggerItem>
@@ -122,8 +113,8 @@ export default function HomePage() {
         <div className="overlay-banner absolute inset-0" />
         <div className="container-premium relative z-10">
           <SectionHeading
-            eyebrow={t("whyEyebrow")}
-            title={t("whyTitle")}
+            eyebrow="Lợi thế"
+            title="Tại sao chọn JUZ Legal"
             dark
             align="center"
           />
@@ -146,9 +137,9 @@ export default function HomePage() {
       <section className="section-premium bg-ivory">
         <div className="container-premium">
           <SectionHeading
-            eyebrow={t("processEyebrow")}
-            title={t("processTitle")}
-            subtitle={t("processSubtitle")}
+            eyebrow="Quy trình"
+            title="Cách chúng tôi làm việc"
+            subtitle="Minh bạch từng giai đoạn — từ tiếp nhận đến hoàn tất và hậu kỳ."
             align="center"
           />
           <div className="mt-10 grid gap-4 sm:mt-14 sm:grid-cols-2 sm:gap-6 lg:mt-16 lg:grid-cols-5 lg:gap-8">
@@ -170,12 +161,12 @@ export default function HomePage() {
       <section className="section-premium bg-white">
         <div className="container-premium">
           <div className="flex flex-col gap-4 border-b border-navy/[0.06] pb-6 sm:gap-6 sm:pb-8 md:flex-row md:items-end md:justify-between">
-            <SectionHeading eyebrow={t("teamEyebrow")} title={t("teamTitle")} />
+            <SectionHeading eyebrow="Đội ngũ" title="Luật sư & cố vấn" />
             <Link
               href="/doi-ngu"
               className="shrink-0 text-[10px] font-semibold uppercase tracking-[0.18em] text-gold transition hover:text-navy sm:text-[11px] sm:tracking-[0.2em]"
             >
-              {t("viewAllTeam")}
+              Xem toàn bộ đội ngũ →
             </Link>
           </div>
           <div className="mt-8 grid gap-6 sm:mt-12 sm:grid-cols-2 sm:gap-8 lg:grid-cols-4">
@@ -199,7 +190,7 @@ export default function HomePage() {
       <section className="border-y border-navy/[0.04] bg-navy-deep py-10 sm:py-14">
         <div className="container-premium">
           <p className="text-center text-[9px] uppercase tracking-[0.28em] text-white/35 sm:text-[10px] sm:tracking-[0.35em]">
-            {t("clientsBanner")}
+            Khách hàng tiêu biểu
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 sm:mt-10 sm:gap-x-12 sm:gap-y-5 md:gap-x-16">
             {clients.map((c) => (
@@ -219,12 +210,12 @@ export default function HomePage() {
       <section className="section-premium bg-ivory">
         <div className="container-premium">
           <div className="flex flex-col gap-4 sm:gap-6 md:flex-row md:items-end md:justify-between">
-            <SectionHeading eyebrow={t("newsEyebrow")} title={t("newsTitle")} />
+            <SectionHeading eyebrow="Insights" title="Tin tức pháp lý" />
             <Link
               href="/tin-tuc"
               className="shrink-0 text-[10px] font-semibold uppercase tracking-[0.18em] text-gold sm:text-[11px] sm:tracking-[0.2em]"
             >
-              {t("viewAllNews")}
+              Tất cả bài viết →
             </Link>
           </div>
           <div className="mt-8 grid gap-6 sm:mt-12 sm:gap-8 md:grid-cols-2 lg:mt-14 lg:grid-cols-3">
@@ -264,9 +255,9 @@ export default function HomePage() {
         <div className="container-premium relative z-10">
           <div className="grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-16">
             <SectionHeading
-              eyebrow={t("bookingEyebrow")}
-              title={t("bookingOnlineTitle")}
-              subtitle={t("bookingOnlineSubtitle")}
+              eyebrow="Tư vấn"
+              title="Đặt lịch trực tuyến"
+              subtitle="Chọn dịch vụ, luật sư và khung giờ — xác nhận trong vòng 2 giờ làm việc."
               dark
             />
             <FadeIn delay={0.1}>
@@ -283,9 +274,9 @@ export default function HomePage() {
           <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
             <div>
               <SectionHeading
-                eyebrow={t("contactEyebrow")}
-                title={t("contactTitle")}
-                subtitle={t("contactSubtitle")}
+                eyebrow="Liên hệ"
+                title="Kết nối với JUZ Legal"
+                subtitle="Chúng tôi sẵn sàng lắng nghe và phản hồi sớm nhất."
               />
               <ul className="mt-6 space-y-3 text-sm text-muted sm:mt-10 sm:space-y-4">
                 <li>{siteConfig.address}</li>
@@ -299,7 +290,7 @@ export default function HomePage() {
                     {siteConfig.email}
                   </a>
                 </li>
-                <li>{tSite("workingHours")}</li>
+                <li>{siteConfig.workingHours}</li>
               </ul>
             </div>
             <div className="card-luxury p-5 sm:p-8 md:p-10">

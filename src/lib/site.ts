@@ -12,7 +12,7 @@ export const siteConfig = {
   phone: "1900633266",
   phoneDisplay: "1900 633 266",
   email: "juz.legal2010@gmail.com",
-  address: "Tầng 12, Tòa nhà ABC, Quận 1, TP. Hồ Chí Minh",
+  address: "Tầng 6, Tòa nhà IMC, Quận 3, Hồ Chí Minh",
   workingHours: "Thứ 2 – Thứ 6: 8:00 – 18:00 | Thứ 7: 8:00 – 12:00",
   mapEmbed:
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.954!2d106.7!3d10.78!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTDCsDQ2JzAwLjAiTiAxMDbCsDQyJzAwLjAiRQ!5e0!3m2!1svi!2s!4v1",

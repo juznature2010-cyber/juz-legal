@@ -5,6 +5,8 @@ export const siteConfig = {
   description:
     "JUZ Legal cung cấp dịch vụ pháp lý chuyên sâu trong lĩnh vực doanh nghiệp, đầu tư, tranh tụng, đất đai, lao động, sở hữu trí tuệ và hôn nhân gia đình.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://juzlegal.com",
+  googleAnalyticsId:
+    process.env.NEXT_PUBLIC_GA_ID ?? "G-NX6GE58D37",
   ogImage: "/og-image.jpg",
   locale: "vi_VN",
   phone: "1900633266",

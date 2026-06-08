@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Inter, Playfair_Display } from "next/font/google";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { FloatingConsultButton } from "@/components/floating-consult-button";
+import { GoogleAnalytics } from "@/components/google-analytics";
 import { Providers } from "@/components/providers";
 import { siteConfig } from "@/lib/site";
 import { createMetadata } from "@/lib/seo";
@@ -67,6 +68,7 @@ export default function RootLayout({
       className={`${inter.variable} ${playfair.variable} ${cormorant.variable}`}
     >
       <body className="font-sans">
+        <GoogleAnalytics />
         <Providers>
           <JsonLd />
           <a

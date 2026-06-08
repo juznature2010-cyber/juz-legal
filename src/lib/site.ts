@@ -12,7 +12,8 @@ export const siteConfig = {
   phone: "1900633266",
   phoneDisplay: "1900 633 266",
   email: "juz.legal@gmail.com",
-  bookingNotifyEmail: "juz.legal@gmail.com",
+  // Resend sandbox: dùng email đăng ký Resend cho tới khi verify domain juzlegal.com
+  bookingNotifyEmail: "juz.nature2010@gmail.com",
   address: "Tầng 6, Tòa nhà IMC, Quận 3, Hồ Chí Minh",
   workingHours: "Thứ 2 – Thứ 6: 8:00 – 18:00 | Thứ 7: 8:00 – 12:00",
   mapEmbed:

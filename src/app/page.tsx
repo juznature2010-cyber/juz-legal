@@ -20,6 +20,7 @@ import {
   clients,
   blogPosts,
   homeFaq,
+  companyIntro,
 } from "@/lib/data";
 import { images } from "@/lib/images";
 import { siteConfig } from "@/lib/site";
@@ -46,13 +47,14 @@ export default function HomePage() {
             <div>
               <SectionHeading
                 eyebrow="Giới thiệu"
-                title="JUZ Legal — Chuẩn mực pháp lý quốc tế"
-                subtitle="Đối tác chiến lược của doanh nghiệp và nhà đầu tư trong hành trình tuân thủ, mở rộng và bảo vệ quyền lợi tại Việt Nam."
+                title={companyIntro.title}
+                subtitle="Đối tác chiến lược, người đồng hành tin cậy trên hành trình chinh phục thành công và bảo vệ quyền lợi hợp pháp của bạn tại Việt Nam."
               />
               <p className="mt-8 text-base leading-relaxed text-muted">
-                Với triết lý tư vấn sâu, minh bạch và bảo mật tuyệt đối, chúng tôi mang đến trải
-                nghiệm pháp lý xứng tầm các hãng luật hàng đầu — từ FDI, M&A đến tranh tụng
-                phức tạp.
+                {companyIntro.lead}
+              </p>
+              <p className="mt-4 text-base leading-relaxed text-muted">
+                {companyIntro.experience}
               </p>
               <Button variant="outline" className="mt-10" asChild>
                 <Link href="/gioi-thieu">

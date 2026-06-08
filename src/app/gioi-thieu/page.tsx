@@ -2,14 +2,19 @@ import Link from "next/link";
 import { createMetadata } from "@/lib/seo";
 import { PageBanner } from "@/components/sections/page-banner";
 import { FadeIn } from "@/components/motion";
-import { companyHistory, values, achievements } from "@/lib/data";
-import { siteConfig } from "@/lib/site";
+import {
+  achievements,
+  companyHistory,
+  companyIntro,
+  values,
+  whyUs,
+} from "@/lib/data";
 import { Button } from "@/components/ui/button";
 
 export const metadata = createMetadata({
   title: "Giới thiệu",
   description:
-    "Giới thiệu Dịch vụ Pháp lý JUZ legal — tầm nhìn, sứ mệnh và giá trị cốt lõi.",
+    "JUZ LEGAL – Chuẩn mực pháp lý quốc tế. Đối tác chiến lược tư vấn pháp lý chuyên sâu cho doanh nghiệp và cá nhân tại Việt Nam.",
   path: "/gioi-thieu",
 });
 
@@ -18,19 +23,70 @@ export default function AboutPage() {
     <>
       <PageBanner
         eyebrow="Về chúng tôi"
-        title="Giới thiệu JUZ Legal"
-        subtitle="Đối tác pháp lý chuyên nghiệp cho doanh nghiệp và cá nhân tại Việt Nam."
+        title={companyIntro.title}
+        subtitle="Đối tác chiến lược, người đồng hành tin cậy trên hành trình bảo vệ quyền lợi hợp pháp của bạn tại Việt Nam."
         image="about"
       />
+
+      <section className="section-premium bg-ivory">
+        <div className="container-narrow space-y-6">
+          <FadeIn>
+            <p className="text-lg leading-relaxed text-muted">{companyIntro.lead}</p>
+          </FadeIn>
+          <FadeIn delay={0.05}>
+            <p className="text-base leading-relaxed text-muted">{companyIntro.experience}</p>
+          </FadeIn>
+        </div>
+      </section>
+
+      <section className="section-premium bg-white">
+        <div className="container-premium">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+            {companyIntro.serviceHighlights.map((item, i) => (
+              <FadeIn key={item.title} delay={i * 0.04}>
+                <div className="card-luxury h-full p-6">
+                  <span className="font-display text-2xl font-light text-gold">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="mt-4 font-display text-lg text-navy">{item.title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-muted">{item.desc}</p>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section-premium bg-navy-deep text-white">
+        <div className="container-premium">
+          <h2 className="text-display-sm">{companyIntro.whyChooseTitle}</h2>
+          <blockquote className="mt-6 max-w-3xl border-l-2 border-gold pl-6 font-display text-xl italic leading-relaxed text-gold-light sm:text-2xl">
+            &ldquo;{companyIntro.quote}&rdquo;
+          </blockquote>
+          <div className="mt-10 grid gap-6 sm:mt-14 sm:grid-cols-2 sm:gap-8 lg:grid-cols-4">
+            {whyUs.map((w) => (
+              <div key={w.title} className="border-t border-gold/40 pt-6">
+                <h3 className="font-display text-lg text-gold">{w.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-white/70">{w.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="section-premium bg-ivory">
         <div className="container-narrow">
           <FadeIn>
-            <p className="text-lg leading-relaxed text-muted">
-              {siteConfig.legalName} (JUZ Legal) được thành lập với sứ mệnh mang
-              đến giải pháp pháp lý toàn diện, minh bạch và hiệu quả — phục vụ doanh nghiệp
-              trong nước, nhà đầu tư FDI và khách hàng cá nhân có nhu cầu tư vấn cao cấp.
-            </p>
+            <p className="text-lg leading-relaxed text-muted">{companyIntro.closing}</p>
           </FadeIn>
+          <div className="mt-10 flex flex-wrap gap-4">
+            <Button variant="gold" asChild>
+              <Link href="/dat-lich">Đặt lịch tư vấn</Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link href="/lien-he">Liên hệ ngay</Link>
+            </Button>
+          </div>
         </div>
       </section>
 
@@ -54,14 +110,14 @@ export default function AboutPage() {
           <div className="grid gap-10 sm:gap-14 lg:grid-cols-2 lg:gap-16">
             <div>
               <h2 className="text-display-sm text-navy">Tầm nhìn</h2>
-              <p className="mt-4 text-muted leading-relaxed">
+              <p className="mt-4 leading-relaxed text-muted">
                 Trở thành hãng luật hàng đầu khu vực — được tin tưởng bởi doanh nghiệp và
                 nhà đầu tư trong hành trình phát triển bền vững tại Việt Nam và ASEAN.
               </p>
             </div>
             <div>
               <h2 className="text-display-sm text-navy">Sứ mệnh</h2>
-              <p className="mt-4 text-muted leading-relaxed">
+              <p className="mt-4 leading-relaxed text-muted">
                 Bảo vệ quyền lợi hợp pháp của khách hàng bằng chuyên môn sâu, đạo đức nghề
                 nghiệp và dịch vụ tận tâm — góp phần xây dựng môi trường kinh doanh minh
                 bạch.
@@ -97,9 +153,6 @@ export default function AboutPage() {
               </li>
             ))}
           </ul>
-          <Button variant="gold" className="mt-10" asChild>
-            <Link href="/dat-lich">Đặt lịch tư vấn</Link>
-          </Button>
         </div>
       </section>
     </>

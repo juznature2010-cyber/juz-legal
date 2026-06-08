@@ -218,22 +218,65 @@ export const practiceAreas = services.map((s) => ({
   icon: s.icon,
 }));
 
+export const companyIntro = {
+  title: "JUZ LEGAL – CHUẨN MỰC PHÁP LÝ QUỐC TẾ",
+  lead:
+    "Trong bối cảnh nền kinh tế toàn cầu không ngừng biến động, việc thấu hiểu và tuân thủ pháp luật không chỉ là trách nhiệm mà còn là tấm khiên vững chắc bảo vệ sự phát triển bền vững của mỗi cá nhân và doanh nghiệp. Tự hào là đơn vị tư vấn pháp lý chuyên sâu hàng đầu, JUZ LEGAL chính là đối tác chiến lược, người đồng hành tin cậy trên hành trình chinh phục thành công và bảo vệ quyền lợi hợp pháp của bạn tại Việt Nam.",
+  experience:
+    "Với hơn 18 năm kinh nghiệm thực chiến cùng mạng lưới phục vụ hơn 500 khách hàng lớn nhỏ, JUZ LEGAL mang đến hệ sinh thái dịch vụ pháp lý toàn diện thuộc 7 lĩnh vực trọng tâm:",
+  serviceHighlights: [
+    {
+      title: "Tư vấn Pháp luật Doanh nghiệp",
+      desc: "Đồng hành từ giai đoạn thành lập, vận hành, M&A đến quản trị tuân thủ.",
+    },
+    {
+      title: "Tư vấn Đầu tư",
+      desc: "Định hình cấu trúc dự án, tối ưu quy trình xin giấy phép cho các nhà đầu tư FDI.",
+    },
+    {
+      title: "Tranh tụng & Giải quyết Tranh chấp",
+      desc: "Đại diện bảo vệ quyền lợi tối đa tại Tòa án, Trọng tài thương mại và các buổi thương lượng.",
+    },
+    {
+      title: "Đất đai & Bất động sản",
+      desc: "Tư vấn giao dịch, chuyển nhượng và tháo gỡ nút thắt giải phóng mặt bằng.",
+    },
+    {
+      title: "Tư vấn Lao động",
+      desc: "Chuẩn hóa nội quy, hợp đồng lao động và xử lý tranh chấp nhân sự hiệu quả.",
+    },
+    {
+      title: "Sở hữu Trí tuệ",
+      desc: "Bảo hộ nhãn hiệu, bản quyền, khẳng định và bảo vệ giá trị thương hiệu sớm nhất.",
+    },
+    {
+      title: "Hôn nhân & Gia đình",
+      desc: "Giải quyết ly hôn, phân chia tài sản và quyền nuôi con bằng sự thấu hiểu và văn minh.",
+    },
+  ],
+  whyChooseTitle: "Tại sao khách hàng lựa chọn JUZ LEGAL?",
+  quote:
+    "Chúng tôi không chỉ cung cấp lời khuyên pháp lý — Chúng tôi trao giải pháp kinh doanh tối ưu.",
+  closing:
+    "Tại JUZ LEGAL, mỗi hồ sơ của khách hàng đều được nâng niu bằng sự chính trực, bảo mật và trách nhiệm cao nhất. Hãy để chúng tôi đơn giản hóa các thủ tục phức tạp, giúp bạn an tâm tập trung vào những mục tiêu lớn lao hơn.",
+} as const;
+
 export const whyUs = [
   {
-    title: "Chuyên môn đa lĩnh vực",
-    desc: "Đội ngũ luật sư giàu kinh nghiệm trong doanh nghiệp, đầu tư, tranh tụng và SHTT.",
-  },
-  {
-    title: "Tư duy giải pháp kinh doanh",
-    desc: "Không chỉ tuân thủ pháp luật — chúng tôi tối ưu chi phí và thời gian cho khách hàng.",
+    title: "Chuyên môn đa lĩnh vực vững vàng",
+    desc: "Đội ngũ luật sư và cố vấn cao cấp không chỉ giỏi luật, mà còn am tường kiến thức bản địa và tư duy kinh doanh nhạy bén.",
   },
   {
     title: "Bảo mật tuyệt đối",
-    desc: "Quy trình bảo mật thông tin và hồ sơ theo chuẩn công ty luật quốc tế.",
+    desc: "Áp dụng quy trình bảo mật thông tin và hồ sơ nghiêm ngặt theo tiêu chuẩn của các hãng luật quốc tế lớn.",
   },
   {
-    title: "Hỗ trợ 24/7 khẩn cấp",
-    desc: "Đường dây nóng pháp lý cho các tình huống cần xử lý ngay.",
+    title: "Minh bạch & Tận tâm",
+    desc: "Quy trình làm việc 5 bước rõ ràng từ tiếp nhận, phân tích rủi ro, báo phí minh bạch cho đến giai đoạn hậu kỳ, cập nhật thay đổi luật.",
+  },
+  {
+    title: "Hỗ trợ khẩn cấp 24/7",
+    desc: "Luôn sẵn sàng túc trực qua đường dây nóng để xử lý kịp thời các tình huống pháp lý phát sinh bất ngờ.",
   },
 ];
 

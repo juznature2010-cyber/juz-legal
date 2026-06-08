@@ -23,12 +23,14 @@ export function StatusSelect({
   const [status, setStatus] = useState(value);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
 
   async function handleChange(next: string) {
     const previous = status;
     setStatus(next);
     setLoading(true);
     setError(null);
+    setNotice(null);
 
     try {
       const res = await fetch(apiPath, {
@@ -37,9 +39,16 @@ export function StatusSelect({
         body: JSON.stringify({ status: next }),
       });
 
+      const data = await res.json().catch(() => ({}));
+
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
         throw new Error(data.error ?? "Cập nhật thất bại.");
+      }
+
+      if (next === "confirmed" && data.zalo?.ok) {
+        setNotice("Đã gửi Zalo xác nhận cho khách hàng.");
+      } else if (next === "confirmed" && data.zalo && !data.zalo.skipped && !data.zalo.ok) {
+        setNotice("Đã xác nhận nhưng gửi Zalo thất bại — kiểm tra cấu hình.");
       }
 
       router.refresh();
@@ -67,6 +76,7 @@ export function StatusSelect({
         ))}
       </select>
       {error ? <p className="text-[10px] text-red-600">{error}</p> : null}
+      {notice ? <p className="text-[10px] text-emerald-700">{notice}</p> : null}
     </div>
   );
 }

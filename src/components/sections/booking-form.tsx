@@ -57,7 +57,7 @@ export function BookingForm() {
       <div className="rounded-lg border border-gold/30 bg-gold/5 p-8 text-center">
         <p className="font-serif text-xl text-navy">Đặt lịch thành công</p>
         <p className="mt-2 text-muted">
-          Chúng tôi đã nhận yêu cầu và sẽ xác nhận lịch hẹn qua điện thoại hoặc email
+          Chúng tôi đã nhận yêu cầu và sẽ xác nhận lịch hẹn qua Zalo hoặc điện thoại
           trong thời gian sớm nhất.
         </p>
       </div>

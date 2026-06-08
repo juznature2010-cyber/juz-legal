@@ -18,6 +18,8 @@
   --ease-luxury: cubic-bezier(0.22, 1, 0.36, 1);
   --header-height: 10rem;
   --header-height-md: 12rem;
+  --header-bar-height: calc(10rem / 3);
+  --header-bar-height-md: calc(12rem / 3);
 }
 
 @media (min-width: 768px) {

@@ -31,14 +31,19 @@ export function Header() {
     <>
       <header
         className={cn(
-          "fixed inset-x-0 top-0 z-50 transition-all duration-500",
+          "fixed inset-x-0 top-0 z-50 overflow-visible transition-all duration-500",
           solid
-            ? "border-b border-white/[0.08] bg-navy-deep/90 py-0 shadow-[0_8px_32px_rgb(0_0_0/0.35)] backdrop-blur-xl"
-            : "bg-gradient-to-b from-navy-deep/80 to-transparent py-2"
+            ? "border-b border-white/[0.08] bg-navy-deep/90 shadow-[0_8px_32px_rgb(0_0_0/0.35)] backdrop-blur-xl"
+            : "bg-gradient-to-b from-navy-deep/80 to-transparent"
         )}
       >
-        <div className="container-premium flex min-h-40 items-center justify-between gap-2 px-3 sm:gap-3 sm:px-6 md:min-h-48 lg:px-8">
-          <Logo priority size="md" className="shrink-0" />
+        <div className="container-premium relative flex h-[var(--header-bar-height)] items-center justify-between gap-2 px-3 sm:gap-3 sm:px-6 md:h-[var(--header-bar-height-md)] lg:px-8">
+          <Logo
+            priority
+            size="md"
+            className="absolute left-3 top-0 z-20 shrink-0 sm:left-6 lg:left-8"
+          />
+          <div className="w-40 shrink-0 md:w-48" aria-hidden />
 
           <nav
             className="hidden flex-1 items-center justify-center gap-3 px-1 xl:flex xl:gap-5 2xl:gap-8"
@@ -121,9 +126,9 @@ export function Header() {
             <button
               type="button"
               className="rounded p-2 text-white transition hover:text-gold xl:hidden"
-            onClick={() => setMobileOpen(true)}
-            aria-label="Mở menu"
-          >
+              onClick={() => setMobileOpen(true)}
+              aria-label="Mở menu"
+            >
               <Menu className="h-6 w-6" />
             </button>
           </div>

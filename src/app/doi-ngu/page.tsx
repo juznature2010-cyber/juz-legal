@@ -21,11 +21,7 @@ export default function TeamPage() {
         <div className="container-premium">
           <div className="grid gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-12">
             {team.map((m) => (
-              <article
-                key={m.slug}
-                className="card-luxury flex flex-col overflow-hidden md:flex-row"
-              >
-                <div className="relative aspect-[4/3] w-full shrink-0 bg-navy-mid md:aspect-square md:w-48 lg:w-56" />
+              <article key={m.slug} className="card-luxury overflow-hidden">
                 <div className="p-5 sm:p-6">
                   <h2 className="font-display text-2xl text-navy">{m.name}</h2>
                   <p className="mt-1 text-[11px] uppercase tracking-[0.15em] text-gold">

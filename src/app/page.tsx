@@ -173,16 +173,6 @@ export default function HomePage() {
             {team.map((m, i) => (
               <FadeIn key={m.slug} delay={i * 0.05}>
                 <article className="group overflow-hidden">
-                  <div className="relative aspect-[3/4] overflow-hidden bg-navy-mid">
-                    <Image
-                      src={images.team}
-                      alt=""
-                      fill
-                      className="object-cover opacity-60 transition duration-700 group-hover:scale-105 group-hover:opacity-80"
-                      sizes="280px"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-navy-deep via-transparent to-transparent" />
-                  </div>
                   <div className="border-l-2 border-gold/0 py-5 pl-0 transition group-hover:border-gold group-hover:pl-4">
                     <h3 className="font-display text-xl text-navy">{m.name}</h3>
                     <p className="mt-1 text-[11px] uppercase tracking-[0.15em] text-gold">

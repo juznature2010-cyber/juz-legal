@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter, Playfair_Display } from "next/font/google";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { FloatingConsultButton } from "@/components/floating-consult-button";
 import { Providers } from "@/components/providers";
 import { siteConfig } from "@/lib/site";
 import { createMetadata } from "@/lib/seo";
@@ -79,6 +80,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <FloatingConsultButton />
         </Providers>
       </body>
     </html>

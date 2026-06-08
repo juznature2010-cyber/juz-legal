@@ -1,28 +1,42 @@
-import Link from "next/link";
+import { setRequestLocale } from "next-intl/server";
 import { createMetadata } from "@/lib/seo";
 import { PageBanner } from "@/components/sections/page-banner";
 import { ServiceIcon } from "@/components/icons";
-import { services } from "@/lib/data";
+import { Link } from "@/i18n/navigation";
+import { getPageData, getPageMeta } from "@/lib/i18n-page";
 
-export const metadata = createMetadata({
-  title: "Dịch vụ pháp lý",
-  description: "Dịch vụ pháp lý doanh nghiệp, đầu tư, tranh tụng, đất đai, lao động, SHTT, hôn nhân gia đình.",
-  path: "/dich-vu",
-});
+type Props = { params: Promise<{ locale: string }> };
 
-export default function ServicesPage() {
+export async function generateMetadata({ params }: Props) {
+  const { locale } = await params;
+  const { t } = await getPageMeta("pages.services");
+  return createMetadata({
+    title: t("title"),
+    description: t("description"),
+    path: "/dich-vu",
+    locale,
+  });
+}
+
+export default async function ServicesPage({ params }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const { data } = await getPageData();
+  const { t } = await getPageMeta("pages.services");
+  const { t: tNav } = await getPageMeta("nav");
+
   return (
     <>
       <PageBanner
-        eyebrow="Dịch vụ"
-        title="Dịch vụ pháp lý"
-        subtitle="Giải pháp chuyên sâu cho từng lĩnh vực — tư vấn, soạn thảo và đại diện."
+        eyebrow={tNav("services")}
+        title={t("title")}
+        subtitle={t("description")}
         image="services"
       />
       <section className="section-premium bg-ivory">
         <div className="container-premium">
           <div className="grid gap-px bg-navy/[0.06] md:grid-cols-2">
-            {services.map((s) => (
+            {data.services.map((s) => (
               <Link
                 key={s.slug}
                 href={`/dich-vu/${s.slug}`}

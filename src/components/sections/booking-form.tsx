@@ -1,20 +1,25 @@
 "use client";
 
 import { useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { getTeamMember, services } from "@/lib/data";
+import { getLocaleData } from "@/lib/locale-data";
+import type { Locale } from "@/i18n/routing";
 
 const BOOKING_LAWYER_SLUG = "tran-dinh-long";
-const bookingLawyer = getTeamMember(BOOKING_LAWYER_SLUG);
 
 function todayInputValue() {
   return new Date().toISOString().slice(0, 10);
 }
 
 export function BookingForm() {
+  const locale = useLocale() as Locale;
+  const { services, getTeamMember } = getLocaleData(locale);
+  const bookingLawyer = getTeamMember(BOOKING_LAWYER_SLUG);
+  const t = useTranslations("booking");
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -45,7 +50,7 @@ export function BookingForm() {
 
     if (!res.ok) {
       const data = await res.json();
-      setError(data.error ?? "Không thể đặt lịch.");
+      setError(data.error ?? t("submit"));
       return;
     }
 
@@ -55,11 +60,8 @@ export function BookingForm() {
   if (sent) {
     return (
       <div className="rounded-lg border border-gold/30 bg-gold/5 p-8 text-center">
-        <p className="font-serif text-xl text-navy">Đặt lịch thành công</p>
-        <p className="mt-2 text-muted">
-          Chúng tôi đã nhận yêu cầu và sẽ xác nhận lịch hẹn qua Zalo hoặc điện thoại
-          trong thời gian sớm nhất.
-        </p>
+        <p className="font-serif text-xl text-navy">{t("successTitle")}</p>
+        <p className="mt-2 text-muted">{t("successBody")}</p>
       </div>
     );
   }
@@ -67,14 +69,14 @@ export function BookingForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <Label htmlFor="service">Dịch vụ *</Label>
+        <Label htmlFor="service">{t("service")} *</Label>
         <select
           id="service"
           name="service"
           required
           className="mt-1.5 flex h-11 w-full rounded-md border border-navy/15 bg-white px-4 text-sm"
         >
-          <option value="">Chọn dịch vụ</option>
+          <option value="">{t("selectService")}</option>
           {services.map((s) => (
             <option key={s.slug} value={s.slug}>
               {s.title}
@@ -83,7 +85,7 @@ export function BookingForm() {
         </select>
       </div>
       <div>
-        <Label htmlFor="lawyer">Luật sư tư vấn</Label>
+        <Label htmlFor="lawyer">{t("lawyer")}</Label>
         <input type="hidden" name="lawyer" value={BOOKING_LAWYER_SLUG} />
         <p className="mt-1.5 rounded-md border border-navy/15 bg-surface px-4 py-3 text-sm text-navy">
           {bookingLawyer?.name ?? "LS. Trần Đình Long"}
@@ -94,53 +96,46 @@ export function BookingForm() {
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <Label htmlFor="date">Ngày *</Label>
-          <Input
-            id="date"
-            name="date"
-            type="date"
-            required
-            min={minDate}
-            className="mt-1.5"
-          />
+          <Label htmlFor="date">{t("date")} *</Label>
+          <Input id="date" name="date" type="date" required min={minDate} className="mt-1.5" />
         </div>
         <div>
-          <Label htmlFor="time">Giờ *</Label>
+          <Label htmlFor="time">{t("time")} *</Label>
           <Input id="time" name="time" type="time" required className="mt-1.5" />
         </div>
       </div>
       <div>
-        <Label htmlFor="mode">Hình thức *</Label>
+        <Label htmlFor="mode">{t("mode")} *</Label>
         <select
           id="mode"
           name="mode"
           required
           className="mt-1.5 flex h-11 w-full rounded-md border border-navy/15 bg-white px-4 text-sm"
         >
-          <option value="online">Tư vấn trực tuyến</option>
-          <option value="office">Tại văn phòng</option>
+          <option value="online">{t("modeOnline")}</option>
+          <option value="office">{t("modeOffice")}</option>
         </select>
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <Label htmlFor="bname">Họ tên *</Label>
+          <Label htmlFor="bname">{t("name")} *</Label>
           <Input id="bname" name="bname" required className="mt-1.5" />
         </div>
         <div>
-          <Label htmlFor="bphone">Điện thoại *</Label>
+          <Label htmlFor="bphone">{t("phone")} *</Label>
           <Input id="bphone" name="bphone" type="tel" required className="mt-1.5" />
         </div>
       </div>
       <div>
-        <Label htmlFor="bnote">Ghi chú</Label>
-        <Textarea id="bnote" name="bnote" className="mt-1.5" />
+        <Label htmlFor="bnote">{t("note")}</Label>
+        <Textarea id="bnote" name="bnote" placeholder={t("notePlaceholder")} className="mt-1.5" />
       </div>
 
-      {error && (
+      {error ? (
         <p className="rounded border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
           {error}
         </p>
-      )}
+      ) : null}
 
       <Button
         type="submit"
@@ -149,7 +144,7 @@ export function BookingForm() {
         className="w-full sm:w-auto"
         disabled={loading}
       >
-        {loading ? "Đang gửi..." : "Gửi yêu cầu đặt lịch"}
+        {loading ? t("submitting") : t("submit")}
       </Button>
     </form>
   );

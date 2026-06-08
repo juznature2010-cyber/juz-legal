@@ -1,0 +1,166 @@
+{
+  "nav": {
+    "home": "首页",
+    "about": "关于我们",
+    "services": "法律服务",
+    "team": "律师团队",
+    "news": "新闻资讯",
+    "contact": "联系我们",
+    "book": "预约"
+  },
+  "common": {
+    "skipToContent": "跳转到主要内容",
+    "bookConsultation": "预约咨询",
+    "contactNow": "立即联系",
+    "learnMore": "了解更多",
+    "explore": "探索",
+    "aboutUs": "关于我们",
+    "viewAll": "查看全部",
+    "readMore": "阅读更多",
+    "back": "返回",
+    "loading": "加载中...",
+    "submit": "提交",
+    "required": "必填"
+  },
+  "header": {
+    "mainNav": "主导航",
+    "openMenu": "打开菜单",
+    "closeMenu": "关闭菜单",
+    "callAria": "立即咨询 — 致电 {phone}"
+  },
+  "footer": {
+    "links": "链接",
+    "services": "服务",
+    "contact": "联系",
+    "tagline": "保密 · 专业 · 国际化"
+  },
+  "locale": {
+    "vi": "VI",
+    "en": "EN",
+    "zh": "中文",
+    "switch": "语言"
+  },
+  "hero": {
+    "title": "为企业和个人提供全面的法律解决方案",
+    "scroll": "探索",
+    "statYears": "年执业经验",
+    "statClients": "客户",
+    "statAreas": "业务领域"
+  },
+  "floating": {
+    "label": "立即咨询"
+  },
+  "home": {
+    "introEyebrow": "简介",
+    "introSubtitle": "您在越南取得成功与维护合法权益的可靠战略合作伙伴。",
+    "practiceEyebrow": "业务领域",
+    "practiceTitle": "核心业务",
+    "practiceSubtitle": "七大重点法律服务领域 — 深厚专业知识与统一服务标准。",
+    "whyEyebrow": "优势",
+    "whyTitle": "为何选择 JUZ Legal",
+    "whySubtitle": "专业、保密与长期陪伴承诺。",
+    "processEyebrow": "流程",
+    "processTitle": "服务流程",
+    "processSubtitle": "从受理到后续跟进，每一步透明清晰。",
+    "teamEyebrow": "团队",
+    "teamTitle": "律师与顾问",
+    "teamSubtitle": "跨领域复杂案件的实战经验。",
+    "clientsEyebrow": "客户",
+    "clientsTitle": "信赖伙伴",
+    "newsEyebrow": "资讯",
+    "newsTitle": "法律观点",
+    "bookingEyebrow": "预约",
+    "bookingTitle": "直接与律师沟通",
+    "bookingSubtitle": "选择服务与时间 — 我们将尽快确认。",
+    "contactEyebrow": "联系",
+    "contactTitle": "提交咨询",
+    "faqEyebrow": "常见问题",
+    "faqTitle": "常见问题",
+    "viewAllTeam": "查看全部团队 →",
+    "viewAllNews": "全部文章 →",
+    "clientsBanner": "代表性客户",
+    "bookingOnlineTitle": "在线预约",
+    "bookingOnlineSubtitle": "选择服务、律师与时间 — 2个工作小时内确认。",
+    "contactTitle": "联系 JUZ Legal",
+    "contactSubtitle": "我们随时倾听并尽快回复。",
+    "processSubtitle": "每个阶段透明清晰 — 从受理到完成及后续跟进。"
+  },
+  "booking": {
+    "title": "预约咨询",
+    "subtitle": "填写以下信息 — 我们将通过 Zalo 或电话确认。",
+    "service": "服务",
+    "selectService": "选择服务",
+    "lawyer": "律师",
+    "date": "日期",
+    "time": "时间",
+    "mode": "形式",
+    "modeOnline": "线上",
+    "modeOffice": "到办公室",
+    "name": "姓名",
+    "phone": "电话",
+    "note": "备注",
+    "notePlaceholder": "简要说明咨询需求（选填）",
+    "submit": "提交预约",
+    "submitting": "提交中...",
+    "successTitle": "预约成功",
+    "successBody": "我们已收到您的请求，将尽快通过 Zalo 或电话确认预约时间。"
+  },
+  "contact": {
+    "title": "联系我们",
+    "subtitle": "发送留言 — 我们在工作时间内回复。",
+    "name": "姓名",
+    "phone": "电话",
+    "email": "邮箱",
+    "service": "感兴趣的服务",
+    "message": "留言内容",
+    "submit": "发送",
+    "submitting": "发送中...",
+    "successTitle": "发送成功",
+    "successBody": "感谢您的留言，我们将尽快与您联系。",
+    "hours": "工作时间",
+    "address": "地址"
+  },
+  "auth": {
+    "login": "登录",
+    "register": "注册",
+    "logout": "退出",
+    "account": "账户",
+    "admin": "管理",
+    "email": "邮箱",
+    "password": "密码",
+    "fullName": "姓名",
+    "loginTitle": "登录",
+    "registerTitle": "创建账户",
+    "accountTitle": "我的账户"
+  },
+  "pages": {
+    "about": {
+      "title": "关于我们",
+      "description": "了解 JUZ Legal — 您在越南的战略法律合作伙伴。"
+    },
+    "services": {
+      "title": "法律服务",
+      "description": "JUZ Legal 七大专业法律服务领域。"
+    },
+    "team": {
+      "title": "律师团队",
+      "description": "JUZ Legal 律师与法律顾问团队。"
+    },
+    "news": {
+      "title": "新闻资讯",
+      "description": "JUZ Legal 法律动态与专业观点。"
+    },
+    "book": {
+      "title": "预约咨询",
+      "description": "预约 JUZ Legal 线上或办公室法律咨询。"
+    },
+    "contactPage": {
+      "title": "联系我们",
+      "description": "联系 JUZ Legal — 热线、邮箱与办公地址。"
+    }
+  },
+  "site": {
+    "description": "JUZ Legal 提供企业、投资、诉讼、房地产、劳动、知识产权及婚姻家庭等领域的专业法律服务。",
+    "workingHours": "周一至周五：8:00 – 18:00 | 周六：8:00 – 12:00"
+  }
+}

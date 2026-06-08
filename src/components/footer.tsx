@@ -1,10 +1,20 @@
-import Link from "next/link";
+"use client";
+
+import { useLocale, useTranslations } from "next-intl";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { siteConfig } from "@/lib/site";
-import { mainNav, services } from "@/lib/data";
+import { getLocaleData } from "@/lib/locale-data";
+import type { Locale } from "@/i18n/routing";
+import { Link } from "@/i18n/navigation";
 import { Logo } from "@/components/logo";
 
 export function Footer() {
+  const locale = useLocale() as Locale;
+  const { mainNav, services } = getLocaleData(locale);
+  const t = useTranslations("footer");
+  const tCommon = useTranslations("common");
+  const tSite = useTranslations("site");
+
   return (
     <footer className="relative border-t border-gold/20 bg-navy-deep text-white">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
@@ -17,12 +27,12 @@ export function Footer() {
             </p>
             <div className="gold-line mt-6 sm:mt-8" />
             <p className="mt-4 max-w-md text-sm leading-relaxed text-white/60 sm:mt-6">
-              {siteConfig.description}
+              {tSite("description")}
             </p>
           </div>
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 sm:gap-10 lg:col-span-7">
             <div>
-              <h3 className="text-eyebrow text-[10px] text-gold/90">Liên kết</h3>
+              <h3 className="text-eyebrow text-[10px] text-gold/90">{t("links")}</h3>
               <ul className="mt-4 space-y-2 text-sm text-white/65 sm:mt-5 sm:space-y-2.5">
                 {mainNav.map((n) => (
                   <li key={n.href}>
@@ -36,13 +46,13 @@ export function Footer() {
                 ))}
                 <li>
                   <Link href="/dat-lich" className="transition hover:text-gold">
-                    Đặt lịch tư vấn
+                    {tCommon("bookConsultation")}
                   </Link>
                 </li>
               </ul>
             </div>
             <div>
-              <h3 className="text-eyebrow text-[10px] text-gold/90">Dịch vụ</h3>
+              <h3 className="text-eyebrow text-[10px] text-gold/90">{t("services")}</h3>
               <ul className="mt-4 space-y-2 text-sm text-white/65 sm:mt-5 sm:space-y-2.5">
                 {services.slice(0, 5).map((s) => (
                   <li key={s.slug}>
@@ -50,14 +60,14 @@ export function Footer() {
                       href={`/dich-vu/${s.slug}`}
                       className="line-clamp-2 transition hover:text-gold"
                     >
-                      {s.title.replace(/^Tư vấn (pháp luật )?/, "")}
+                      {s.title}
                     </Link>
                   </li>
                 ))}
               </ul>
             </div>
             <div className="col-span-2 sm:col-span-1">
-              <h3 className="text-eyebrow text-[10px] text-gold/90">Liên hệ</h3>
+              <h3 className="text-eyebrow text-[10px] text-gold/90">{t("contact")}</h3>
               <ul className="mt-4 space-y-3 text-sm text-white/65 sm:mt-5 sm:space-y-4">
                 <li className="flex gap-3">
                   <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
@@ -80,8 +90,10 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-white/[0.06] pt-6 text-center text-[10px] uppercase tracking-[0.12em] text-white/35 sm:mt-14 sm:flex-row sm:gap-4 sm:pt-8 sm:text-left sm:text-[11px] sm:tracking-[0.15em]">
-          <p>© {new Date().getFullYear()} {siteConfig.legalName}</p>
-          <p>Bảo mật · Chuyên nghiệp · Toàn cầu</p>
+          <p>
+            © {new Date().getFullYear()} {siteConfig.legalName}
+          </p>
+          <p>{t("tagline")}</p>
         </div>
       </div>
     </footer>

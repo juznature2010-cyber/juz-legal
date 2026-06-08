@@ -1,7 +1,12 @@
+"use client";
+
 import { Phone } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { siteConfig } from "@/lib/site";
 
 export function FloatingConsultButton() {
+  const t = useTranslations("floating");
+  const tHeader = useTranslations("header");
   const telHref = `tel:${siteConfig.phone}`;
 
   return (
@@ -12,7 +17,7 @@ export function FloatingConsultButton() {
         marginBottom: "env(safe-area-inset-bottom)",
         marginRight: "env(safe-area-inset-right)",
       }}
-      aria-label={`Tư vấn ngay — gọi ${siteConfig.phoneDisplay}`}
+      aria-label={tHeader("callAria", { phone: siteConfig.phoneDisplay })}
     >
       <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gold text-navy shadow-inner transition group-hover:scale-105">
         <Phone className="h-5 w-5" aria-hidden />
@@ -20,7 +25,7 @@ export function FloatingConsultButton() {
       </span>
       <span className="flex flex-col pr-0.5">
         <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-gold sm:text-[11px]">
-          Tư vấn ngay
+          {t("label")}
         </span>
         <span className="text-xs font-medium text-white/90 sm:text-sm">
           {siteConfig.phoneDisplay}

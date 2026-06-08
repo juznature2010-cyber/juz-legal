@@ -1,7 +1,8 @@
 "use client";
 
 import type { ReactNode } from "react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { LogIn, LogOut, LayoutDashboard, UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getDashboardPath } from "@/lib/auth-utils";
@@ -32,6 +33,7 @@ function AuthButtonGroup({
 }
 
 export function AuthNav({ light = false }: { light?: boolean }) {
+  const t = useTranslations("auth");
   const { user, role, loading } = useAuth();
   if (loading) return null;
 
@@ -44,7 +46,7 @@ export function AuthNav({ light = false }: { light?: boolean }) {
           asChild
           className="h-8 border-0 px-2 shadow-none xl:px-2.5 2xl:px-3"
         >
-          <Link href="/dang-ky">Đăng ký</Link>
+          <Link href="/dang-ky">{t("register")}</Link>
         </Button>
         <span
           className={cn(
@@ -61,7 +63,7 @@ export function AuthNav({ light = false }: { light?: boolean }) {
         >
           <Link href="/dang-nhap">
             <LogIn className="h-3.5 w-3.5" />
-            Đăng nhập
+            {t("login")}
           </Link>
         </Button>
       </AuthButtonGroup>
@@ -88,7 +90,7 @@ export function AuthNav({ light = false }: { light?: boolean }) {
             ) : (
               <UserCircle className="h-3.5 w-3.5" />
             )}
-            {isAdmin ? "Quản trị" : "Tài khoản"}
+            {isAdmin ? t("admin") : t("account")}
           </Link>
         </Button>
         <button
@@ -99,10 +101,10 @@ export function AuthNav({ light = false }: { light?: boolean }) {
               ? "flex items-center gap-1.5 text-[11px] uppercase tracking-[0.12em] text-white/70 transition hover:text-gold"
               : "flex items-center gap-1.5 text-[11px] uppercase tracking-[0.12em] text-muted transition hover:text-navy"
           }
-          aria-label="Đăng xuất"
+          aria-label={t("logout")}
         >
           <LogOut className="h-3.5 w-3.5" />
-          <span className="hidden xl:inline">Đăng xuất</span>
+          <span className="hidden xl:inline">{t("logout")}</span>
         </button>
       </div>
     );
@@ -116,7 +118,7 @@ export function AuthNav({ light = false }: { light?: boolean }) {
         asChild
         className="h-8 border-0 px-2 shadow-none xl:px-2.5 2xl:px-3"
       >
-        <Link href="/dang-ky">Đăng ký</Link>
+        <Link href="/dang-ky">{t("register")}</Link>
       </Button>
       <span
         className={cn(
@@ -133,7 +135,7 @@ export function AuthNav({ light = false }: { light?: boolean }) {
       >
         <Link href="/dang-nhap">
           <LogIn className="h-3.5 w-3.5" />
-          Đăng nhập
+          {t("login")}
         </Link>
       </Button>
     </AuthButtonGroup>

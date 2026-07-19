@@ -81,7 +81,14 @@ export function Footer() {
         </div>
         <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-white/[0.06] pt-6 text-center text-[10px] uppercase tracking-[0.12em] text-white/35 sm:mt-14 sm:flex-row sm:gap-4 sm:pt-8 sm:text-left sm:text-[11px] sm:tracking-[0.15em]">
           <p>© {new Date().getFullYear()} {siteConfig.legalName}</p>
-          <p>Bảo mật · Chuyên nghiệp · Toàn cầu</p>
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-2">
+            <Link href="/chinh-sach-bao-mat" className="hover:text-gold">
+              Chính sách bảo mật
+            </Link>
+            <Link href="/dieu-khoan-su-dung" className="hover:text-gold">
+              Điều khoản sử dụng
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

@@ -42,5 +42,4 @@ next-env.d.ts
 
 # registered users (local storage)
 /data/users.json
-
-.vercel
+/tmp-sync/

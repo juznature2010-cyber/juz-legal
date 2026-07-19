@@ -34,7 +34,13 @@ export default function BlogPage() {
         <div className="container-premium">
           <div className="relative w-full max-w-md">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+            <label htmlFor="blog-search" className="sr-only">
+              Tìm bài viết pháp lý
+            </label>
             <Input
+              id="blog-search"
+              type="search"
+              aria-label="Tìm bài viết pháp lý"
               placeholder="Tìm bài viết..."
               value={q}
               onChange={(e) => setQ(e.target.value)}

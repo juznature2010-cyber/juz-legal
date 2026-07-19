@@ -31,14 +31,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
   const [user, setUser] = useState<User | null>(null);
   const [role, setRole] = useState<UserRole | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(Boolean(supabase));
 
   useEffect(() => {
     const client = supabase;
-    if (!client) {
-      setLoading(false);
-      return;
-    }
+    if (!client) return;
 
     async function syncUser(currentUser: User | null) {
       if (!currentUser) {

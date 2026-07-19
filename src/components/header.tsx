@@ -56,9 +56,24 @@ export function Header() {
                     className="relative flex justify-center"
                     onMouseEnter={() => setMegaOpen(true)}
                     onMouseLeave={() => setMegaOpen(false)}
+                    onFocusCapture={() => setMegaOpen(true)}
+                    onBlurCapture={(event) => {
+                      if (!event.currentTarget.contains(event.relatedTarget)) {
+                        setMegaOpen(false);
+                      }
+                    }}
+                    onKeyDown={(event) => {
+                      if (event.key === "Escape") {
+                        setMegaOpen(false);
+                        event.currentTarget.querySelector<HTMLElement>("a")?.focus();
+                      }
+                    }}
                   >
                     <Link
                       href="/dich-vu"
+                      aria-haspopup="true"
+                      aria-expanded={megaOpen}
+                      aria-controls="services-mega-menu"
                       className={cn(
                         "nav-link inline-flex items-center gap-1",
                         pathname.startsWith("/dich-vu") && "nav-link-active"
@@ -68,6 +83,7 @@ export function Header() {
                       <span className="text-[7px] text-gold">▼</span>
                     </Link>
                     <div
+                      id="services-mega-menu"
                       className={cn(
                         "absolute left-1/2 top-full z-50 w-[560px] -translate-x-1/2 pt-4 transition-all duration-300",
                         megaOpen
@@ -129,6 +145,8 @@ export function Header() {
                 className="rounded p-2 text-white transition hover:text-gold lg:hidden"
                 onClick={() => setMobileOpen(true)}
                 aria-label="Mở menu"
+                aria-expanded={mobileOpen}
+                aria-controls="mobile-navigation"
               >
                 <Menu className="h-6 w-6" />
               </button>

@@ -1,4 +1,4 @@
-import { readFileSync, existsSync } from "fs";
+import { readFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import pg from "pg";

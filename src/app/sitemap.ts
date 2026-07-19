@@ -12,6 +12,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/tin-tuc",
     "/dat-lich",
     "/lien-he",
+    "/chinh-sach-bao-mat",
+    "/dieu-khoan-su-dung",
   ].map((path) => ({
     url: `${base}${path || "/"}`,
     lastModified: new Date(),

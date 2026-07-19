@@ -2,7 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { useRef } from "react";
 import { ArrowDown, Calendar, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,13 +24,26 @@ const stats = [
 export function HeroCinematic() {
   const ref = useRef<HTMLElement>(null);
   const isDesktop = useMediaQuery("(min-width: 768px)");
+  const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
-  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", isDesktop ? "18%" : "0%"]);
-  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", isDesktop ? "8%" : "0%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, isDesktop ? 0 : 1]);
+  const imageY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    ["0%", isDesktop && !reduceMotion ? "18%" : "0%"]
+  );
+  const contentY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    ["0%", isDesktop && !reduceMotion ? "8%" : "0%"]
+  );
+  const opacity = useTransform(
+    scrollYProgress,
+    [0, 0.5],
+    [1, isDesktop && !reduceMotion ? 0 : 1]
+  );
 
   return (
     <section
@@ -54,7 +72,7 @@ export function HeroCinematic() {
       >
         <div className="container-premium">
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={reduceMotion ? false : { opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
             className="max-w-5xl"
@@ -84,7 +102,7 @@ export function HeroCinematic() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0 }}
+            initial={reduceMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.9, duration: 0.7 }}
             className="mt-10 border-t border-white/10 pt-6 sm:mt-14 md:mt-20 md:pt-8"

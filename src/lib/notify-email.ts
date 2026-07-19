@@ -75,8 +75,53 @@ export type BookingEmailPayload = {
   note: string | null;
 };
 
+export type ContactEmailPayload = {
+  name: string;
+  phone: string;
+  email: string | null;
+  message: string;
+  serviceLabel: string | null;
+};
+
 function formatSubmittedAt() {
   return new Date().toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });
+}
+
+export async function sendNewContactNotification(payload: ContactEmailPayload) {
+  const submittedAt = formatSubmittedAt();
+  const text = [
+    "Khách hàng vừa gửi yêu cầu liên hệ trên website JUZ Legal.",
+    `Thời gian nhận: ${submittedAt}`,
+    "",
+    `Khách hàng: ${payload.name}`,
+    `Điện thoại: ${payload.phone}`,
+    payload.email ? `Email: ${payload.email}` : null,
+    payload.serviceLabel ? `Dịch vụ: ${payload.serviceLabel}` : null,
+    `Nội dung: ${payload.message}`,
+    "",
+    `Xem trong admin: ${siteConfig.url}/admin/lien-he`,
+  ]
+    .filter(Boolean)
+    .join("\n");
+
+  const html = `
+    <h2>Yêu cầu liên hệ mới — JUZ Legal</h2>
+    <p><strong>Thời gian nhận:</strong> ${escapeHtml(submittedAt)}</p>
+    <ul>
+      <li><strong>Khách hàng:</strong> ${escapeHtml(payload.name)}</li>
+      <li><strong>Điện thoại:</strong> ${escapeHtml(payload.phone)}</li>
+      ${payload.email ? `<li><strong>Email:</strong> ${escapeHtml(payload.email)}</li>` : ""}
+      ${payload.serviceLabel ? `<li><strong>Dịch vụ:</strong> ${escapeHtml(payload.serviceLabel)}</li>` : ""}
+      <li><strong>Nội dung:</strong> ${escapeHtml(payload.message)}</li>
+    </ul>
+    <p><a href="${siteConfig.url}/admin/lien-he">Mở bảng quản trị liên hệ</a></p>
+  `;
+
+  return sendNotificationEmail({
+    subject: `[JUZ Legal] Liên hệ mới — ${payload.name}`,
+    text,
+    html,
+  });
 }
 
 export async function sendNewBookingRequestNotification(payload: BookingEmailPayload) {

@@ -3,9 +3,33 @@ import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { getService, getTeamMember } from "@/lib/data";
 import { sendNewBookingRequestNotification } from "@/lib/notify-email";
+import { bookingSchema } from "@/lib/lead-schemas";
+import {
+  checkRateLimit,
+  getClientIp,
+  isSameOrigin,
+} from "@/lib/rate-limit";
 
 export async function POST(request: Request) {
   try {
+    if (!isSameOrigin(request)) {
+      return NextResponse.json(
+        { error: "Nguồn yêu cầu không hợp lệ." },
+        { status: 403 }
+      );
+    }
+
+    const rate = checkRateLimit(`booking:${getClientIp(request)}`);
+    if (!rate.allowed) {
+      return NextResponse.json(
+        { error: "Bạn gửi quá nhiều yêu cầu. Vui lòng thử lại sau." },
+        {
+          status: 429,
+          headers: { "Retry-After": String(rate.retryAfterSeconds) },
+        }
+      );
+    }
+
     if (!isSupabaseConfigured()) {
       return NextResponse.json(
         { error: "Hệ thống đặt lịch chưa được cấu hình. Vui lòng gọi hotline." },
@@ -13,36 +37,27 @@ export async function POST(request: Request) {
       );
     }
 
-    const body = await request.json();
-    const serviceSlug = String(body.serviceSlug ?? "").trim();
-    const lawyerSlug = String(body.lawyerSlug ?? "").trim() || null;
-    const bookingDate = String(body.bookingDate ?? "").trim();
-    const bookingTime = String(body.bookingTime ?? "").trim();
-    const mode = String(body.mode ?? "").trim();
-    const clientName = String(body.clientName ?? "").trim();
-    const clientPhone = String(body.clientPhone ?? "").trim();
-    const note = String(body.note ?? "").trim() || null;
-
-    if (!serviceSlug || !bookingDate || !bookingTime || !clientName || !clientPhone) {
+    const parsed = bookingSchema.safeParse(await request.json());
+    if (!parsed.success) {
       return NextResponse.json(
-        { error: "Vui lòng điền đầy đủ thông tin bắt buộc." },
+        {
+          error: parsed.error.issues[0]?.message || "Dữ liệu không hợp lệ.",
+          fields: parsed.error.flatten().fieldErrors,
+        },
         { status: 400 }
       );
     }
 
-    if (mode !== "online" && mode !== "office") {
-      return NextResponse.json({ error: "Hình thức không hợp lệ." }, { status: 400 });
-    }
-
-    const today = new Date().toLocaleDateString("en-CA", {
-      timeZone: "Asia/Ho_Chi_Minh",
-    });
-    if (bookingDate < today) {
-      return NextResponse.json(
-        { error: "Ngày đặt lịch không thể là ngày trong quá khứ." },
-        { status: 400 }
-      );
-    }
+    const {
+      serviceSlug,
+      lawyerSlug = null,
+      bookingDate,
+      bookingTime,
+      mode,
+      clientName,
+      clientPhone,
+      note = null,
+    } = parsed.data;
 
     const supabase = await createClient();
     const {

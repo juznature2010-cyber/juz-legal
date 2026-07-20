@@ -43,6 +43,12 @@ const quickLinks = [
     icon: Mail,
   },
   {
+    title: "Thư viện vbpl",
+    desc: "Đồng bộ AI văn bản từ vbpl.vn → Supabase",
+    href: "/admin/thu-vien-phap-luat",
+    icon: FileText,
+  },
+  {
     title: "Nội dung website",
     desc: "Xem trang dịch vụ trên website",
     href: "/dich-vu",

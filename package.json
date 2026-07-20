@@ -13,6 +13,7 @@
     "setup": "npm install",
     "supabase:check": "node scripts/check-supabase.mjs",
     "supabase:schema": "node scripts/run-schema.mjs",
+    "supabase:legal-schema": "node scripts/run-legal-schema.mjs",
     "supabase:patch": "node scripts/run-production-patch.mjs",
     "supabase:admin": "node scripts/setup-admin.mjs",
     "supabase:admin:recreate": "node scripts/setup-admin.mjs --recreate",
@@ -20,7 +21,9 @@
     "supabase:vercel-env": "node scripts/print-vercel-env.mjs",
     "vercel:sync-env": "node scripts/sync-vercel-env.mjs",
     "vercel:sync-preview": "node scripts/sync-preview-env.mjs",
-    "supabase:setup": "npm run supabase:check && npm run supabase:patch && npm run supabase:test"
+    "supabase:setup": "npm run supabase:check && npm run supabase:patch && npm run supabase:test",
+    "vbpl:seed-queue": "node scripts/seed-vbpl-queue.mjs",
+    "vbpl:sync": "node scripts/sync-vbpl.mjs"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",

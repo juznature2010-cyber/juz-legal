@@ -35,3 +35,51 @@ export type Booking = {
   status: "pending" | "confirmed" | "cancelled" | "done";
   created_at: string;
 };
+
+export type LegalDocumentRow = {
+  id: string;
+  slug: string;
+  number: string;
+  doc_type: string;
+  title: string;
+  issuer: string;
+  field: string;
+  status: "con-hieu-luc" | "het-hieu-luc" | "chua-co-hieu-luc" | "sua-doi-bo-sung";
+  issued_date: string | null;
+  effective_date: string | null;
+  expired_date: string | null;
+  signer: string | null;
+  source_url: string | null;
+  vbpl_item_id: string | null;
+  synced_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type VbplSyncJob = {
+  id: string;
+  status: "pending" | "running" | "completed" | "failed";
+  triggered_by: string;
+  total_items: number;
+  processed_items: number;
+  success_count: number;
+  error_count: number;
+  ai_model: string | null;
+  log: unknown;
+  started_at: string | null;
+  completed_at: string | null;
+  created_at: string;
+};
+
+export type VbplSyncQueueItem = {
+  id: string;
+  vbpl_item_id: string;
+  source_url: string;
+  priority: number;
+  status: "pending" | "processing" | "done" | "failed";
+  last_error: string | null;
+  attempts: number;
+  scheduled_at: string;
+  processed_at: string | null;
+  created_at: string;
+};

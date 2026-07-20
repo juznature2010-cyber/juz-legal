@@ -6,19 +6,30 @@ import { PageBanner } from "@/components/sections/page-banner";
 import { LegalDocumentMeta } from "@/components/legal-documents/legal-document-meta";
 import { LegalDocumentContent } from "@/components/legal-documents/legal-document-content";
 import { LegalDocumentTable } from "@/components/legal-documents/legal-document-table";
-import { legalDocuments, getLegalDocumentBySlug } from "@/lib/legal-documents/documents";
+import {
+  getLegalDocumentWithFallback,
+  getLegalDocumentsFromDb,
+} from "@/lib/supabase/queries-legal";
+import { legalDocuments as staticDocuments } from "@/lib/legal-documents/documents";
 import { getRelatedDocuments } from "@/lib/legal-documents/search";
 import { siteConfig } from "@/lib/site";
 
 type Props = { params: Promise<{ slug: string }> };
 
+export const revalidate = 300;
+
 export async function generateStaticParams() {
-  return legalDocuments.map((doc) => ({ slug: doc.slug }));
+  const fromDb = await getLegalDocumentsFromDb();
+  const slugs = new Set([
+    ...staticDocuments.map((doc) => doc.slug),
+    ...fromDb.map((doc) => doc.slug),
+  ]);
+  return [...slugs].map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
-  const document = getLegalDocumentBySlug(slug);
+  const document = await getLegalDocumentWithFallback(slug);
   if (!document) return {};
   return createMetadata({
     title: document.title,
@@ -29,10 +40,13 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function LegalDocumentPage({ params }: Props) {
   const { slug } = await params;
-  const document = getLegalDocumentBySlug(slug);
+  const document = await getLegalDocumentWithFallback(slug);
   if (!document) notFound();
 
-  const related = getRelatedDocuments(document, legalDocuments);
+  const fromDb = await getLegalDocumentsFromDb();
+  const allDocuments = fromDb.length ? fromDb : staticDocuments;
+
+  const related = getRelatedDocuments(document, allDocuments);
 
   const schema = {
     "@context": "https://schema.org",

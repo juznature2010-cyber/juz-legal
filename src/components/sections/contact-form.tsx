@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,6 +10,7 @@ export function ContactForm({ serviceLabel }: { serviceLabel?: string }) {
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const id = useId();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -17,27 +18,30 @@ export function ContactForm({ serviceLabel }: { serviceLabel?: string }) {
     setLoading(true);
 
     const form = new FormData(e.currentTarget);
-    const res = await fetch("/api/contact", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: form.get("name"),
-        phone: form.get("phone"),
-        email: form.get("email"),
-        message: form.get("message"),
-        serviceLabel,
-      }),
-    });
-
-    setLoading(false);
-
-    if (!res.ok) {
-      const data = await res.json();
-      setError(data.error ?? "Không thể gửi yêu cầu.");
-      return;
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.get("name"),
+          phone: form.get("phone"),
+          email: form.get("email"),
+          message: form.get("message"),
+          serviceLabel,
+          website: form.get("website"),
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setError(data.error ?? "Không thể gửi yêu cầu.");
+        return;
+      }
+      setSent(true);
+    } catch {
+      setError("Không thể kết nối. Vui lòng gọi hotline.");
+    } finally {
+      setLoading(false);
     }
-
-    setSent(true);
   }
 
   if (sent) {
@@ -53,6 +57,15 @@ export function ContactForm({ serviceLabel }: { serviceLabel?: string }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="sr-only" aria-hidden="true">
+        <Label htmlFor={`${id}-website`}>Website</Label>
+        <Input
+          id={`${id}-website`}
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
       {serviceLabel && (
         <p className="text-sm text-muted">
           Dịch vụ quan tâm: <strong className="text-navy">{serviceLabel}</strong>
@@ -61,11 +74,11 @@ export function ContactForm({ serviceLabel }: { serviceLabel?: string }) {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <Label htmlFor="name">Họ và tên *</Label>
-          <Input id="name" name="name" required className="mt-1.5" />
+          <Input id="name" name="name" required minLength={2} autoComplete="name" className="mt-1.5" />
         </div>
         <div>
           <Label htmlFor="phone">Số điện thoại *</Label>
-          <Input id="phone" name="phone" type="tel" required className="mt-1.5" />
+          <Input id="phone" name="phone" type="tel" required minLength={8} autoComplete="tel" inputMode="tel" className="mt-1.5" />
         </div>
       </div>
       <div>
@@ -74,11 +87,11 @@ export function ContactForm({ serviceLabel }: { serviceLabel?: string }) {
       </div>
       <div>
         <Label htmlFor="message">Nội dung *</Label>
-        <Textarea id="message" name="message" required className="mt-1.5" />
+        <Textarea id="message" name="message" required minLength={10} className="mt-1.5" />
       </div>
 
       {error && (
-        <p className="rounded border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <p role="alert" className="rounded border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
           {error}
         </p>
       )}

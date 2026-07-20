@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/lib/site";
-import { blogPosts, services } from "@/lib/data";
+import { blogPosts, services, libraryItems } from "@/lib/data";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = siteConfig.url;
@@ -12,6 +12,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/tin-tuc",
     "/dat-lich",
     "/lien-he",
+    "/chinh-sach-bao-mat",
+    "/dieu-khoan-su-dung",
   ].map((path) => ({
     url: `${base}${path || "/"}`,
     lastModified: new Date(),
@@ -33,5 +35,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...staticRoutes, ...serviceRoutes, ...blogRoutes];
+  const libraryRoutes = libraryItems.map((p) => ({
+    url: `${base}/thu-vien-phap-luat/${p.slug}`,
+    lastModified: new Date(p.date),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+
+  return [
+    ...staticRoutes,
+    ...serviceRoutes,
+    ...blogRoutes,
+    {
+      url: `${base}/thu-vien-phap-luat`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    },
+    ...libraryRoutes,
+  ];
 }

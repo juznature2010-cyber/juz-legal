@@ -10,33 +10,49 @@ Website chính thức **Dịch vụ Pháp lý JUZ legal** — Next.js, TypeScrip
 - Framer Motion
 - Lucide Icons
 - Radix UI (Accordion, Label, Slot)
+- Supabase (Auth, booking, contact, admin)
+- Resend (email notifications)
+- Zod + Vitest (validation and tests)
 
 ## Chạy local
 
 ```bash
 cd juz-legal
 npm install
+npm run test
 npm run dev
 ```
 
 Mở [http://localhost:5173](http://localhost:5173)
 
-## Build production
+## Kiểm tra trước khi deploy
 
 ```bash
-npm run build
-npm run start
+npm run check
+```
+
+Lệnh này chạy lint, unit test và production build.
+
+## Cấu hình
+
+Sao chép `env.example` thành `.env.local`, tạo Supabase project còn hoạt động,
+chạy schema trong `supabase/`, rồi cấu hình Resend. Không commit `.env.local`,
+database password hoặc API key.
+
+```bash
+npm run vercel:sync-preview   # đồng bộ Preview từ production + .env.local
+npm run vercel:sync-env       # đồng bộ đầy đủ từ .env.local
 ```
 
 ## Triển khai
 
 ### Vercel
 
-1. Đẩy thư mục `juz-legal` lên GitHub.
-2. Import project trên [vercel.com](https://vercel.com).
-3. Root Directory: `juz-legal`
-4. Biến môi trường: `NEXT_PUBLIC_SITE_URL=https://juzlegal.com`
-5. Gắn domain `juzlegal.com` trong Vercel → Settings → Domains
+1. Mở pull request vào repository GitHub.
+2. Chờ GitHub Actions pass.
+3. Kiểm thử Deploy Preview: auth, admin, form, email và responsive.
+4. Khai báo đủ biến trong `env.example` trên Vercel.
+5. Chỉ merge/promote production sau khi backup và xác nhận database.
 
 ### VPS (Node)
 
@@ -66,9 +82,10 @@ server {
 
 ```
 src/
-  app/           # Trang & routing
+  app/           # Trang, API routes, admin
   components/    # Header, Footer, sections, UI
-  lib/           # data.ts, site.ts, seo.ts
+  lib/           # Content, Supabase, auth, validation, notifications
+supabase/         # Schema và production patches
 ```
 
 Chỉnh nội dung: `src/lib/data.ts`, thông tin liên hệ: `src/lib/site.ts`.

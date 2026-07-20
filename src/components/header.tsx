@@ -12,6 +12,23 @@ import { MobileMenu } from "@/components/mobile-menu";
 import { AuthNav } from "@/components/auth/auth-nav";
 import { Logo } from "@/components/logo";
 
+function isNavActive(pathname: string, href: string) {
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+function navLinkLabel(item: (typeof mainNav)[number]) {
+  if ("shortLabel" in item && item.shortLabel) {
+    return (
+      <>
+        <span className="2xl:hidden">{item.shortLabel}</span>
+        <span className="hidden 2xl:inline">{item.label}</span>
+      </>
+    );
+  }
+  return item.label;
+}
+
 export function Header() {
   const pathname = usePathname();
   const isHome = pathname === "/";
@@ -46,7 +63,7 @@ export function Header() {
 
           <div className="flex w-full min-w-0 items-center justify-end gap-2 pl-[10.5rem] sm:pl-[11rem] md:pl-[13rem] lg:gap-4 lg:pl-[14.5rem] xl:pl-[15.5rem]">
             <nav
-              className="hidden min-w-0 flex-1 grid-cols-6 items-center lg:grid"
+              className="hidden min-w-0 flex-1 grid-cols-7 items-center lg:grid"
               aria-label="Chính"
             >
               {mainNav.map((item) =>
@@ -56,18 +73,34 @@ export function Header() {
                     className="relative flex justify-center"
                     onMouseEnter={() => setMegaOpen(true)}
                     onMouseLeave={() => setMegaOpen(false)}
+                    onFocusCapture={() => setMegaOpen(true)}
+                    onBlurCapture={(event) => {
+                      if (!event.currentTarget.contains(event.relatedTarget)) {
+                        setMegaOpen(false);
+                      }
+                    }}
+                    onKeyDown={(event) => {
+                      if (event.key === "Escape") {
+                        setMegaOpen(false);
+                        event.currentTarget.querySelector<HTMLElement>("a")?.focus();
+                      }
+                    }}
                   >
                     <Link
                       href="/dich-vu"
+                      aria-haspopup="true"
+                      aria-expanded={megaOpen}
+                      aria-controls="services-mega-menu"
                       className={cn(
                         "nav-link inline-flex items-center gap-1",
                         pathname.startsWith("/dich-vu") && "nav-link-active"
                       )}
                     >
-                      {item.label}
+                      {navLinkLabel(item)}
                       <span className="text-[7px] text-gold">▼</span>
                     </Link>
                     <div
+                      id="services-mega-menu"
                       className={cn(
                         "absolute left-1/2 top-full z-50 w-[560px] -translate-x-1/2 pt-4 transition-all duration-300",
                         megaOpen
@@ -99,10 +132,10 @@ export function Header() {
                       href={item.href}
                       className={cn(
                         "nav-link",
-                        pathname === item.href && "nav-link-active"
+                        isNavActive(pathname, item.href) && "nav-link-active"
                       )}
                     >
-                      {item.label}
+                      {navLinkLabel(item)}
                     </Link>
                   </div>
                 )
@@ -129,6 +162,8 @@ export function Header() {
                 className="rounded p-2 text-white transition hover:text-gold lg:hidden"
                 onClick={() => setMobileOpen(true)}
                 aria-label="Mở menu"
+                aria-expanded={mobileOpen}
+                aria-controls="mobile-navigation"
               >
                 <Menu className="h-6 w-6" />
               </button>

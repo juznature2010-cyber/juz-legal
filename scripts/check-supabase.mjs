@@ -21,8 +21,10 @@ function loadEnv() {
 }
 
 const env = loadEnv();
-const url = env.NEXT_PUBLIC_SUPABASE_URL;
-const key = env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const url = process.env.NEXT_PUBLIC_SUPABASE_URL || env.NEXT_PUBLIC_SUPABASE_URL;
+const key =
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 console.log("\n=== Kiem tra Supabase — JUZ Legal ===\n");
 

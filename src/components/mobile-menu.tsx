@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useRef } from "react";
 import { mainNav, services } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { AuthNav } from "@/components/auth/auth-nav";
@@ -15,11 +16,47 @@ export function MobileMenu({
   open: boolean;
   onClose: () => void;
 }) {
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const focusable = panelRef.current?.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    );
+    focusable?.[0]?.focus();
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        onClose();
+        return;
+      }
+      if (event.key !== "Tab" || !focusable?.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open, onClose]);
+
   return (
     <AnimatePresence>
       {open && (
-        <div className="fixed inset-0 z-[60] xl:hidden">
+        <div id="mobile-navigation" className="fixed inset-0 z-[60] xl:hidden">
           <motion.div
+            ref={panelRef}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -32,6 +69,9 @@ export function MobileMenu({
             exit={{ x: "100%" }}
             transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
             className="absolute right-0 top-0 flex h-full w-full max-w-[min(100%,24rem)] flex-col border-l border-white/10 bg-navy-deep p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:max-w-md sm:p-8"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menu điều hướng"
           >
             <div className="flex items-center justify-between gap-3">
               <Logo size="sm" className="min-w-0 shrink-0" />

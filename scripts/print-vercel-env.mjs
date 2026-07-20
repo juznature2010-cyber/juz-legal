@@ -5,13 +5,14 @@ const env = loadEnvLocal();
 const required = [
   "NEXT_PUBLIC_SUPABASE_URL",
   "NEXT_PUBLIC_SUPABASE_ANON_KEY",
-  "NEXT_PUBLIC_SITE_URL",
   "ADMIN_EMAIL",
-  "NEXT_PUBLIC_ADMIN_EMAIL",
+  "BOOKING_NOTIFY_EMAIL",
+  "RESEND_API_KEY",
+  "EMAIL_FROM",
 ];
 
-console.log("\n=== Bien moi truong can them tren Vercel ===\n");
-console.log("Vercel → Project juz-legal → Settings → Environment Variables\n");
+console.log("\n=== Bien moi truong can co tren Vercel ===\n");
+console.log("Production + Preview (bat buoc cho form/auth/email):\n");
 
 for (const key of required) {
   const value = env[key];
@@ -19,22 +20,16 @@ for (const key of required) {
     console.log(`[THIEU] ${key}`);
     continue;
   }
-  if (key.includes("KEY")) {
+  if (key.includes("KEY") || key.includes("SECRET") || key.includes("TOKEN")) {
     console.log(`${key}=${value.slice(0, 8)}... (${value.length} ky tu)`);
-  } else if (key === "NEXT_PUBLIC_SITE_URL") {
-    console.log(`${key}=https://www.juzlegal.com  (Production)`);
-    console.log(`${key}=http://localhost:5173     (Preview/Development — tuy chon)`);
   } else {
     console.log(`${key}=${value}`);
   }
 }
 
-console.log("BOOKING_NOTIFY_EMAIL=juz.legal@gmail.com");
-console.log("RESEND_API_KEY=(lay tu resend.com → API Keys)");
-console.log("EMAIL_FROM=JUZ Legal <notifications@yourdomain.com>  (sau khi xac minh domain)\n");
-console.log("NEXT_PUBLIC_GA_ID=G-NX6GE58D37  (tuy chon)\n");
-console.log("Sau khi them → Deployments → Redeploy\n");
-console.log("=== Supabase Auth URL Configuration ===\n");
-console.log("Site URL:        https://www.juzlegal.com");
-console.log("Redirect URLs:   https://www.juzlegal.com/*");
-console.log("                 http://localhost:5173/*\n");
+console.log("\nNEXT_PUBLIC_SITE_URL=https://www.juzlegal.com");
+console.log("NEXT_PUBLIC_GA_ID=G-NX6GE58D37  (tuy chon)");
+console.log("\nDong bo Preview tu production:");
+console.log("  npm run vercel:sync-preview");
+console.log("\nDong bo day du tu .env.local:");
+console.log("  npm run vercel:sync-env\n");

@@ -37,11 +37,6 @@ export function getPostAuthPath(role: UserRole, callbackUrl?: string | null) {
   return getDashboardPath(role);
 }
 
-export function isReservedAdminEmail(email: string) {
-  const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL?.toLowerCase();
-  return !!adminEmail && email.trim().toLowerCase() === adminEmail;
-}
-
 export async function signOutAndRedirect(
   supabase: SupabaseClient,
   href = "/"

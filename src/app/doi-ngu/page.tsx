@@ -1,5 +1,6 @@
 import { createMetadata } from "@/lib/seo";
 import { PageBanner } from "@/components/sections/page-banner";
+import { TeamPortrait } from "@/components/team-portrait";
 import { team } from "@/lib/data";
 
 export const metadata = createMetadata({
@@ -22,6 +23,7 @@ export default function TeamPage() {
           <div className="grid gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-12">
             {team.map((m) => (
               <article key={m.slug} className="card-luxury overflow-hidden">
+                <TeamPortrait name={m.name} className="aspect-[16/10] sm:aspect-[3/2]" />
                 <div className="p-5 sm:p-6">
                   <h2 className="font-display text-2xl text-navy">{m.name}</h2>
                   <p className="mt-1 text-[11px] uppercase tracking-[0.15em] text-gold">

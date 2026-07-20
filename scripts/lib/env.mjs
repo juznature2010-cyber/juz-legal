@@ -28,9 +28,18 @@ export function requireEnv(keys) {
   return env;
 }
 
-export const projectRef = "ssnaglboujsbmjnkguhr";
+export function getProjectRef(env = { ...loadEnvLocal(), ...process.env }) {
+  const url = env.NEXT_PUBLIC_SUPABASE_URL || "";
+  const match = url.match(/https:\/\/([a-z0-9]+)\.supabase\.co/i);
+  return match?.[1] ?? null;
+}
 
-export function getDbConnectionStrings(password) {
+export function getDbConnectionStrings(password, projectRef = getProjectRef()) {
+  if (!projectRef) {
+    throw new Error(
+      "Khong xac dinh duoc project ref. Kiem tra NEXT_PUBLIC_SUPABASE_URL."
+    );
+  }
   const encoded = encodeURIComponent(password);
   return [
     {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,6 +19,7 @@ export function BookingForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const minDate = todayInputValue();
+  const id = useId();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -26,30 +27,33 @@ export function BookingForm() {
     setLoading(true);
 
     const form = new FormData(e.currentTarget);
-    const res = await fetch("/api/bookings", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        serviceSlug: form.get("service"),
-        lawyerSlug: BOOKING_LAWYER_SLUG,
-        bookingDate: form.get("date"),
-        bookingTime: form.get("time"),
-        mode: form.get("mode"),
-        clientName: form.get("bname"),
-        clientPhone: form.get("bphone"),
-        note: form.get("bnote") || null,
-      }),
-    });
-
-    setLoading(false);
-
-    if (!res.ok) {
-      const data = await res.json();
-      setError(data.error ?? "Không thể đặt lịch.");
-      return;
+    try {
+      const res = await fetch("/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          serviceSlug: form.get("service"),
+          lawyerSlug: BOOKING_LAWYER_SLUG,
+          bookingDate: form.get("date"),
+          bookingTime: form.get("time"),
+          mode: form.get("mode"),
+          clientName: form.get("bname"),
+          clientPhone: form.get("bphone"),
+          note: form.get("bnote") || null,
+          website: form.get("website"),
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setError(data.error ?? "Không thể đặt lịch.");
+        return;
+      }
+      setSent(true);
+    } catch {
+      setError("Không thể kết nối. Vui lòng gọi hotline.");
+    } finally {
+      setLoading(false);
     }
-
-    setSent(true);
   }
 
   if (sent) {
@@ -66,6 +70,15 @@ export function BookingForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="sr-only" aria-hidden="true">
+        <Label htmlFor={`${id}-website`}>Website</Label>
+        <Input
+          id={`${id}-website`}
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
       <div>
         <Label htmlFor="service">Dịch vụ *</Label>
         <select
@@ -124,11 +137,11 @@ export function BookingForm() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <Label htmlFor="bname">Họ tên *</Label>
-          <Input id="bname" name="bname" required className="mt-1.5" />
+          <Input id="bname" name="bname" required minLength={2} autoComplete="name" className="mt-1.5" />
         </div>
         <div>
           <Label htmlFor="bphone">Điện thoại *</Label>
-          <Input id="bphone" name="bphone" type="tel" required className="mt-1.5" />
+          <Input id="bphone" name="bphone" type="tel" required minLength={8} autoComplete="tel" inputMode="tel" className="mt-1.5" />
         </div>
       </div>
       <div>
@@ -137,7 +150,7 @@ export function BookingForm() {
       </div>
 
       {error && (
-        <p className="rounded border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <p role="alert" className="rounded border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
           {error}
         </p>
       )}

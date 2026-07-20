@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
+import { motion, type Variants, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const luxuryEase = [0.22, 1, 0.36, 1] as const;
@@ -19,9 +19,10 @@ export function FadeIn({
   className?: string;
   delay?: number;
 }) {
+  const reduceMotion = useReducedMotion();
   return (
     <motion.div
-      initial="hidden"
+      initial={reduceMotion ? false : "hidden"}
       whileInView="visible"
       viewport={{ once: true, margin: "-80px" }}
       variants={fadeUp}
@@ -40,9 +41,10 @@ export function Stagger({
   children: React.ReactNode;
   className?: string;
 }) {
+  const reduceMotion = useReducedMotion();
   return (
     <motion.div
-      initial="hidden"
+      initial={reduceMotion ? false : "hidden"}
       whileInView="visible"
       viewport={{ once: true, margin: "-60px" }}
       variants={{
@@ -75,9 +77,10 @@ export function StaggerItem({
 }
 
 export function LineReveal({ className }: { className?: string }) {
+  const reduceMotion = useReducedMotion();
   return (
     <motion.div
-      initial={{ scaleX: 0 }}
+      initial={reduceMotion ? false : { scaleX: 0 }}
       whileInView={{ scaleX: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.9, ease: luxuryEase }}

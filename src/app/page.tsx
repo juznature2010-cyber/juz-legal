@@ -1,11 +1,10 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FadeIn, Stagger, StaggerItem } from "@/components/motion";
 import { ServiceIcon } from "@/components/icons";
+import { TeamPortrait } from "@/components/team-portrait";
 import { HeroCinematic } from "@/components/sections/hero-cinematic";
 import { SectionHeading } from "@/components/sections/section-heading";
 import { TestimonialsSlider } from "@/components/sections/testimonials";
@@ -173,6 +172,10 @@ export default function HomePage() {
             {team.map((m, i) => (
               <FadeIn key={m.slug} delay={i * 0.05}>
                 <article className="group overflow-hidden">
+                  <TeamPortrait
+                    name={m.name}
+                    className="transition duration-700 group-hover:scale-[1.02]"
+                  />
                   <div className="border-l-2 border-gold/0 py-5 pl-0 transition group-hover:border-gold group-hover:pl-4">
                     <h3 className="font-display text-xl text-navy">{m.name}</h3>
                     <p className="mt-1 text-[11px] uppercase tracking-[0.15em] text-gold">

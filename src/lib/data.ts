@@ -40,15 +40,24 @@ export type LibraryItem = {
   content: string[];
 };
 
-export const mainNav = [
-  { href: "/", label: "Trang chủ" },
+export type NavItem = {
+  href: string;
+  label: string;
+  shortLabel?: string;
+  hideOnDesktop?: boolean;
+};
+
+export const mainNav: NavItem[] = [
+  { href: "/", label: "Trang chủ", hideOnDesktop: true },
   { href: "/gioi-thieu", label: "Giới thiệu" },
   { href: "/dich-vu", label: "Dịch vụ" },
   { href: "/doi-ngu", label: "Đội ngũ" },
-  { href: "/tin-tuc", label: "Tin tức" },
   { href: "/thu-vien-phap-luat", label: "Thư viện pháp luật", shortLabel: "Thư viện" },
+  { href: "/tin-tuc", label: "Tin tức" },
   { href: "/lien-he", label: "Liên hệ" },
-] as const;
+];
+
+export const headerNav = mainNav.filter((item) => !item.hideOnDesktop);
 
 export const services: Service[] = [
   {

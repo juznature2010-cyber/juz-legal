@@ -18,7 +18,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const rate = checkRateLimit(`contact:${getClientIp(request)}`);
+    const rate = await checkRateLimit(`contact:${getClientIp(request)}`);
     if (!rate.allowed) {
       return NextResponse.json(
         { error: "Bạn gửi quá nhiều yêu cầu. Vui lòng thử lại sau." },

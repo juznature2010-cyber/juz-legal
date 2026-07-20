@@ -2,13 +2,16 @@ import type { User } from "@supabase/supabase-js";
 
 export type UserRole = "admin" | "user";
 
-export function resolveUserRole(user: User, profileRole?: string): UserRole {
-  const adminEmail = (
-    process.env.ADMIN_EMAIL ?? process.env.NEXT_PUBLIC_ADMIN_EMAIL
-  )?.toLowerCase();
-
-  if (adminEmail && user.email?.toLowerCase() === adminEmail) {
-    return "admin";
+export function resolveUserRole(
+  user: User,
+  profileRole?: string,
+  matchAdminEmail = false
+): UserRole {
+  if (matchAdminEmail) {
+    const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase();
+    if (adminEmail && user.email?.toLowerCase() === adminEmail) {
+      return "admin";
+    }
   }
   if (profileRole === "admin") {
     return "admin";

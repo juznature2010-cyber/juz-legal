@@ -12,13 +12,7 @@ const nextConfig: NextConfig = {
     root: path.join(__dirname),
   },
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-        pathname: "/**",
-      },
-    ],
+    remotePatterns: [],
   },
   async headers() {
     return [
@@ -42,7 +36,7 @@ const nextConfig: NextConfig = {
               "default-src 'self'",
               scriptPolicy,
               "style-src 'self' 'unsafe-inline'",
-              "img-src 'self' data: blob: https://images.unsplash.com https://www.google-analytics.com",
+              "img-src 'self' data: blob: https://www.google-analytics.com",
               "font-src 'self' data:",
               "connect-src 'self' https://*.supabase.co https://www.google-analytics.com https://region1.google-analytics.com",
               "frame-src https://www.google.com https://maps.google.com",

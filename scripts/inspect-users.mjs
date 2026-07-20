@@ -2,9 +2,9 @@ import { readFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import pg from "pg";
+import { getProjectRef } from "./lib/env.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const projectRef = "ssnaglboujsbmjnkguhr";
 const env = {};
 for (const line of readFileSync(join(root, ".env.local"), "utf8").split("\n")) {
   const t = line.trim();
@@ -12,6 +12,10 @@ for (const line of readFileSync(join(root, ".env.local"), "utf8").split("\n")) {
   const i = t.indexOf("=");
   if (i > 0) env[t.slice(0, i)] = t.slice(i + 1);
 }
+
+const projectRef = getProjectRef(env);
+if (!projectRef) throw new Error("Khong xac dinh duoc Supabase project ref");
+
 const encoded = encodeURIComponent(env.SUPABASE_DB_PASSWORD);
 const client = new pg.Client({
   connectionString: `postgresql://postgres.${projectRef}:${encoded}@aws-1-ap-southeast-1.pooler.supabase.com:5432/postgres`,

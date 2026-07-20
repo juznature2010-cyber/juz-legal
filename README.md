@@ -39,6 +39,11 @@ Sao chép `env.example` thành `.env.local`, tạo Supabase project còn hoạt 
 chạy schema trong `supabase/`, rồi cấu hình Resend. Không commit `.env.local`,
 database password hoặc API key.
 
+```bash
+npm run vercel:sync-preview   # đồng bộ Preview từ production + .env.local
+npm run vercel:sync-env       # đồng bộ đầy đủ từ .env.local
+```
+
 ## Triển khai
 
 ### Vercel

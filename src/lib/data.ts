@@ -296,7 +296,7 @@ export const team: TeamMember[] = [
     specialty: "Doanh nghiệp, M&A, FDI",
     experience: "40 năm công tác pháp luật — Nguyên Chánh án, Phó Chánh án",
     license: "Chứng chỉ trọng tài quốc tế",
-    image: "/team/placeholder-1.jpg",
+    image: "",
   },
   {
     slug: "tran-thi-binh",
@@ -305,7 +305,7 @@ export const team: TeamMember[] = [
     specialty: "Tranh chấp thương mại, trọng tài",
     experience: "14 năm — hơn 200 vụ việc tại tòa và trọng tài",
     license: "Thành viên Đoàn luật sư TP.HCM",
-    image: "/team/placeholder-2.jpg",
+    image: "",
   },
   {
     slug: "le-minh-cuong",
@@ -314,7 +314,7 @@ export const team: TeamMember[] = [
     specialty: "Đầu tư, bất động sản",
     experience: "12 năm — dự án FDI và BĐS quy mô lớn",
     license: "Thành viên Đoàn luật sư TP.HCM",
-    image: "/team/placeholder-3.jpg",
+    image: "",
   },
   {
     slug: "pham-thu-ha",
@@ -323,7 +323,7 @@ export const team: TeamMember[] = [
     specialty: "Sở hữu trí tuệ, lao động",
     experience: "10 năm — đăng ký nhãn hiệu và tư vấn HR",
     license: "Thành viên Đoàn luật sư Hà Nội",
-    image: "/team/placeholder-4.jpg",
+    image: "",
   },
 ];
 

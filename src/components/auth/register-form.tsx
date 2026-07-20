@@ -11,7 +11,6 @@ import { mapSupabaseAuthError } from "@/lib/auth-utils";
 import {
   getPostAuthPath,
   getSafeCallbackUrl,
-  isReservedAdminEmail,
   resolveUserRoleClient,
 } from "@/lib/auth-client";
 
@@ -44,7 +43,15 @@ export function RegisterForm() {
 
     const trimmedEmail = email.trim();
 
-    if (isReservedAdminEmail(trimmedEmail)) {
+    const reservedRes = await fetch("/api/auth/check-email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: trimmedEmail }),
+    });
+    const reservedData = (await reservedRes.json().catch(() => ({}))) as {
+      reserved?: boolean;
+    };
+    if (reservedData.reserved) {
       setError("Email này dành cho quản trị viên. Vui lòng dùng email khác.");
       return;
     }

@@ -18,6 +18,8 @@
     "supabase:admin:recreate": "node scripts/setup-admin.mjs --recreate",
     "supabase:test": "node scripts/test-auth.mjs",
     "supabase:vercel-env": "node scripts/print-vercel-env.mjs",
+    "vercel:sync-env": "node scripts/sync-vercel-env.mjs",
+    "vercel:sync-preview": "node scripts/sync-preview-env.mjs",
     "supabase:setup": "npm run supabase:check && npm run supabase:patch && npm run supabase:test"
   },
   "dependencies": {

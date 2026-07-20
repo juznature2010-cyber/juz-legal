@@ -10,16 +10,28 @@ export const metadata = createMetadata({
 
 const sections = [
   {
+    title: "Phạm vi áp dụng",
+    body: "Chính sách này áp dụng cho website JUZ Legal, biểu mẫu liên hệ/đặt lịch, tài khoản khách hàng và các kênh tư vấn trực tuyến do JUZ Legal vận hành.",
+  },
+  {
     title: "Thông tin thu thập",
-    body: "Khi gửi biểu mẫu hoặc tạo tài khoản, bạn có thể cung cấp họ tên, số điện thoại, email, nội dung tư vấn và thời gian mong muốn. Chúng tôi chỉ thu thập dữ liệu cần thiết để xử lý yêu cầu.",
+    body: "Chúng tôi có thể thu thập họ tên, số điện thoại, email, nội dung tư vấn, thời gian mong muốn, thông tin đăng nhập và dữ liệu kỹ thuật cần thiết (cookie, nhật ký truy cập) để vận hành dịch vụ.",
   },
   {
     title: "Mục đích sử dụng",
-    body: "Dữ liệu được dùng để liên hệ, sắp xếp lịch tư vấn, cung cấp dịch vụ, quản lý tài khoản, phòng chống spam và thực hiện nghĩa vụ pháp luật.",
+    body: "Dữ liệu được dùng để tiếp nhận yêu cầu, sắp xếp lịch tư vấn, cung cấp dịch vụ pháp lý, quản lý tài khoản, phòng chống spam, cải thiện trải nghiệm và thực hiện nghĩa vụ pháp luật.",
+  },
+  {
+    title: "Chia sẻ dữ liệu",
+    body: "JUZ Legal không bán dữ liệu cá nhân. Dữ liệu chỉ được chia sẻ với nhà cung cấp hạ tầng (Supabase, Vercel, Resend, Google Analytics) trong phạm vi cần thiết để vận hành website và dịch vụ.",
   },
   {
     title: "Bảo mật và lưu trữ",
-    body: "JUZ Legal giới hạn quyền truy cập, áp dụng biện pháp bảo vệ phù hợp và không bán dữ liệu cá nhân. Thời hạn lưu trữ phụ thuộc mục đích xử lý và nghĩa vụ pháp lý.",
+    body: "Chúng tôi áp dụng kiểm soát truy cập, mã hóa truyền tải (HTTPS) và chính sách quyền truy cập nội bộ. Thời hạn lưu trữ phụ thuộc mục đích xử lý, hợp đồng dịch vụ và nghĩa vụ lưu trữ theo quy định pháp luật.",
+  },
+  {
+    title: "Quyền của chủ thể dữ liệu",
+    body: "Bạn có thể yêu cầu truy cập, chỉnh sửa, hạn chế xử lý hoặc xóa dữ liệu bằng cách liên hệ JUZ Legal. Một số dữ liệu có thể cần được lưu theo nghĩa vụ pháp lý hoặc hợp đồng đang hiệu lực.",
   },
 ];
 
@@ -34,6 +46,9 @@ export default function PrivacyPage() {
       />
       <article className="section-premium bg-ivory">
         <div className="container-narrow space-y-8 text-muted">
+          <p className="text-sm text-navy/80">
+            Cập nhật lần cuối: tháng 7/2026
+          </p>
           {sections.map((section) => (
             <section key={section.title}>
               <h2 className="font-display text-2xl text-navy">{section.title}</h2>
@@ -41,15 +56,11 @@ export default function PrivacyPage() {
             </section>
           ))}
           <p>
-            Yêu cầu truy cập, chỉnh sửa hoặc xóa dữ liệu có thể gửi tới{" "}
+            Mọi yêu cầu về dữ liệu cá nhân vui lòng gửi tới{" "}
             <a className="text-navy underline" href={`mailto:${siteConfig.email}`}>
               {siteConfig.email}
-            </a>
-            .
-          </p>
-          <p className="text-sm">
-            Nội dung này cần được người phụ trách pháp lý phê duyệt trước khi
-            vận hành chính thức.
+            </a>{" "}
+            hoặc hotline {siteConfig.phoneDisplay}.
           </p>
         </div>
       </article>

@@ -12,6 +12,23 @@ import { MobileMenu } from "@/components/mobile-menu";
 import { AuthNav } from "@/components/auth/auth-nav";
 import { Logo } from "@/components/logo";
 
+function isNavActive(pathname: string, href: string) {
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+function navLinkLabel(item: (typeof mainNav)[number]) {
+  if ("shortLabel" in item && item.shortLabel) {
+    return (
+      <>
+        <span className="2xl:hidden">{item.shortLabel}</span>
+        <span className="hidden 2xl:inline">{item.label}</span>
+      </>
+    );
+  }
+  return item.label;
+}
+
 export function Header() {
   const pathname = usePathname();
   const isHome = pathname === "/";
@@ -46,7 +63,7 @@ export function Header() {
 
           <div className="flex w-full min-w-0 items-center justify-end gap-2 pl-[10.5rem] sm:pl-[11rem] md:pl-[13rem] lg:gap-4 lg:pl-[14.5rem] xl:pl-[15.5rem]">
             <nav
-              className="hidden min-w-0 flex-1 grid-cols-6 items-center lg:grid"
+              className="hidden min-w-0 flex-1 grid-cols-7 items-center lg:grid"
               aria-label="Chính"
             >
               {mainNav.map((item) =>
@@ -79,7 +96,7 @@ export function Header() {
                         pathname.startsWith("/dich-vu") && "nav-link-active"
                       )}
                     >
-                      {item.label}
+                      {navLinkLabel(item)}
                       <span className="text-[7px] text-gold">▼</span>
                     </Link>
                     <div
@@ -115,10 +132,10 @@ export function Header() {
                       href={item.href}
                       className={cn(
                         "nav-link",
-                        pathname === item.href && "nav-link-active"
+                        isNavActive(pathname, item.href) && "nav-link-active"
                       )}
                     >
-                      {item.label}
+                      {navLinkLabel(item)}
                     </Link>
                   </div>
                 )

@@ -46,7 +46,7 @@ export const mainNav = [
   { href: "/dich-vu", label: "Dịch vụ" },
   { href: "/doi-ngu", label: "Đội ngũ" },
   { href: "/tin-tuc", label: "Tin tức" },
-  { href: "/thu-vien-phap-luat", label: "Thư viện pháp luật" },
+  { href: "/thu-vien-phap-luat", label: "Thư viện pháp luật", shortLabel: "Thư viện" },
   { href: "/lien-he", label: "Liên hệ" },
 ] as const;
 

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/lib/site";
-import { blogPosts, services, libraryItems } from "@/lib/data";
+import { blogPosts, services } from "@/lib/data";
+import { legalDocuments } from "@/lib/legal-documents";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = siteConfig.url;
@@ -35,9 +36,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  const libraryRoutes = libraryItems.map((p) => ({
-    url: `${base}/thu-vien-phap-luat/${p.slug}`,
-    lastModified: new Date(p.date),
+  const libraryRoutes = legalDocuments.map((doc) => ({
+    url: `${base}/thu-vien-phap-luat/${doc.slug}`,
+    lastModified: new Date(doc.issuedDate),
     changeFrequency: "monthly" as const,
     priority: 0.6,
   }));

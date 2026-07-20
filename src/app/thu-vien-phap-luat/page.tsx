@@ -1,96 +1,159 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Link from "next/link";
-import { Search } from "lucide-react";
 import { PageBanner } from "@/components/sections/page-banner";
-import { Input } from "@/components/ui/input";
-import { FadeIn } from "@/components/motion";
-import { libraryItems } from "@/lib/data";
+import { LegalSearchPanel } from "@/components/legal-documents/legal-search-panel";
+import { LegalSidebar } from "@/components/legal-documents/legal-sidebar";
+import { LegalDocumentTable } from "@/components/legal-documents/legal-document-table";
+import {
+  legalDocuments,
+  documentTypes,
+  legalFields,
+  filterLegalDocuments,
+  countDocumentsByType,
+  countDocumentsByField,
+} from "@/lib/legal-documents";
+import type {
+  DocumentListMode,
+  LegalDocumentFilters,
+} from "@/lib/legal-documents/types";
+import { cn } from "@/lib/utils";
 
-export default function LibraryPage() {
-  const [q, setQ] = useState("");
+const listTabs: { id: DocumentListMode; label: string }[] = [
+  { id: "all", label: "Tất cả văn bản" },
+  { id: "new", label: "Văn bản mới" },
+  { id: "effective", label: "Hiệu lực trong tháng" },
+  { id: "expired", label: "Hết hiệu lực trong tháng" },
+];
 
-  const filtered = useMemo(() => {
-    const term = q.trim().toLowerCase();
-    if (!term) return libraryItems;
-    return libraryItems.filter(
-      (p) =>
-        p.title.toLowerCase().includes(term) ||
-        p.excerpt.toLowerCase().includes(term) ||
-        p.category.toLowerCase().includes(term)
-    );
-  }, [q]);
+export default function LegalLibraryPage() {
+  const [filters, setFilters] = useState<LegalDocumentFilters>({
+    q: "",
+    matchMode: "all",
+    searchIn: "all",
+    listMode: "all",
+    advancedOpen: false,
+  });
+  const [sidebarMode, setSidebarMode] = useState<"type" | "field">("type");
+  const [appliedFilters, setAppliedFilters] = useState(filters);
 
-  const featured = filtered[0];
+  const typeCounts = useMemo(
+    () => countDocumentsByType(legalDocuments),
+    []
+  );
+  const fieldCounts = useMemo(
+    () => countDocumentsByField(legalDocuments),
+    []
+  );
+
+  const results = useMemo(
+    () => filterLegalDocuments(legalDocuments, appliedFilters),
+    [appliedFilters]
+  );
+
+  function applyFilters(next = filters) {
+    setAppliedFilters(next);
+  }
+
+  function handleSidebarSelect(id?: string) {
+    const next =
+      sidebarMode === "type"
+        ? { ...appliedFilters, docType: id, field: undefined }
+        : { ...appliedFilters, field: id, docType: undefined };
+    setFilters(next);
+    setAppliedFilters(next);
+  }
+
+  const activeSidebarId =
+    sidebarMode === "type" ? appliedFilters.docType : appliedFilters.field;
 
   return (
     <>
       <PageBanner
-        eyebrow="Thư viện pháp luật"
-        title="Kho tài liệu pháp lý"
-        subtitle="Tổng hợp hướng dẫn & phân tích ngắn gọn — giúp doanh nghiệp ra quyết định đúng và giảm rủi ro thực thi."
+        eyebrow="CSDL Văn bản pháp luật"
+        title="Tra cứu văn bản quy phạm pháp luật"
+        subtitle="Tìm kiếm theo số hiệu, trích yếu, loại văn bản, cơ quan ban hành, lĩnh vực và tình trạng hiệu lực — theo mô hình vbpl.vn."
         image="insights"
       />
+
       <section className="section-premium bg-ivory">
-        <div className="container-premium">
-          <div className="relative w-full max-w-md">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
-            <label htmlFor="library-search" className="sr-only">
-              Tìm tài liệu pháp lý
-            </label>
-            <Input
-              id="library-search"
-              type="search"
-              aria-label="Tìm tài liệu pháp lý"
-              placeholder="Tìm theo tiêu đề, chủ đề..."
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              className="pl-10"
-            />
-          </div>
+        <div className="container-premium space-y-8">
+          <LegalSearchPanel
+            filters={filters}
+            onChange={setFilters}
+            onSubmit={() => applyFilters(filters)}
+          />
 
-          {featured && !q && (
-            <FadeIn className="mt-10">
-              <p className="text-xs font-semibold uppercase tracking-wider text-gold">
-                Nổi bật
+          <div className="grid gap-6 xl:grid-cols-[18rem_1fr]">
+            <div className="space-y-4">
+              <div className="flex rounded-sm border border-navy/10 bg-white p-1">
+                <button
+                  type="button"
+                  onClick={() => setSidebarMode("type")}
+                  className={cn(
+                    "flex-1 rounded-sm px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] transition",
+                    sidebarMode === "type"
+                      ? "bg-navy text-white"
+                      : "text-muted hover:text-navy"
+                  )}
+                >
+                  Loại VB
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSidebarMode("field")}
+                  className={cn(
+                    "flex-1 rounded-sm px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] transition",
+                    sidebarMode === "field"
+                      ? "bg-navy text-white"
+                      : "text-muted hover:text-navy"
+                  )}
+                >
+                  Lĩnh vực
+                </button>
+              </div>
+
+              <LegalSidebar
+                title={sidebarMode === "type" ? "Loại văn bản" : "Lĩnh vực"}
+                items={sidebarMode === "type" ? documentTypes : legalFields}
+                counts={sidebarMode === "type" ? typeCounts : fieldCounts}
+                activeId={activeSidebarId}
+                onSelect={handleSidebarSelect}
+              />
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex flex-wrap gap-2">
+                {listTabs.map((tab) => (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => {
+                      const next = { ...appliedFilters, listMode: tab.id };
+                      setFilters(next);
+                      setAppliedFilters(next);
+                    }}
+                    className={cn(
+                      "rounded-sm border px-3 py-2 text-xs font-semibold uppercase tracking-[0.08em] transition",
+                      appliedFilters.listMode === tab.id
+                        ? "border-gold bg-gold/10 text-navy"
+                        : "border-navy/10 bg-white text-muted hover:border-gold/40 hover:text-navy"
+                    )}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              <p className="text-sm text-muted">
+                Tìm thấy <strong className="text-navy">{results.length}</strong> văn bản
               </p>
-              <Link
-                href={`/thu-vien-phap-luat/${featured.slug}`}
-                className="card-luxury mt-6 block p-6 transition sm:mt-8 sm:p-8 md:p-10"
-              >
-                <span className="text-eyebrow text-[10px]">{featured.category}</span>
-                <h2 className="mt-3 font-display text-2xl text-navy sm:mt-4 sm:text-3xl">
-                  {featured.title}
-                </h2>
-                <p className="mt-3 text-muted">{featured.excerpt}</p>
-              </Link>
-            </FadeIn>
-          )}
 
-          <div className="mt-8 grid gap-6 sm:mt-12 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((item) => (
-              <Link
-                key={item.slug}
-                href={`/thu-vien-phap-luat/${item.slug}`}
-                className="card-luxury block p-5 transition sm:p-7"
-              >
-                <span className="text-eyebrow text-[10px]">{item.category}</span>
-                <h3 className="mt-3 font-display text-xl text-navy">{item.title}</h3>
-                <p className="mt-2 text-sm text-muted line-clamp-3">{item.excerpt}</p>
-                <p className="mt-4 text-xs text-muted">
-                  {item.date} · {item.readTime}
-                </p>
-              </Link>
-            ))}
+              <LegalDocumentTable documents={results} />
+            </div>
           </div>
-
-          {filtered.length === 0 && (
-            <p className="mt-8 text-muted">Không tìm thấy tài liệu phù hợp.</p>
-          )}
         </div>
       </section>
     </>
   );
 }
-

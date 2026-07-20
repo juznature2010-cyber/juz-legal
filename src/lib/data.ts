@@ -30,16 +30,6 @@ export type BlogPost = {
   content: string[];
 };
 
-export type LibraryItem = {
-  slug: string;
-  title: string;
-  excerpt: string;
-  category: string;
-  date: string;
-  readTime: string;
-  content: string[];
-};
-
 export type NavItem = {
   href: string;
   label: string;
@@ -414,87 +404,6 @@ export const blogPosts: BlogPost[] = [
     ],
   },
 ];
-
-export const libraryItems: LibraryItem[] = [
-  {
-    slug: "thu-tuc-dau-tu-2026",
-    title: "Thủ tục đầu tư 2026: Quy trình tinh gọn & lưu ý tuân thủ",
-    excerpt:
-      "Tổng hợp luồng thủ tục thường gặp, điểm dễ sai và cách chuẩn bị hồ sơ để giảm rủi ro kéo dài thời gian phê duyệt.",
-    category: "Đầu tư",
-    date: "2026-06-20",
-    readTime: "7 phút",
-    content: [
-      "Năm 2026 tiếp tục nhấn mạnh yêu cầu minh bạch thông tin và tính nhất quán giữa tài liệu dự án. Doanh nghiệp nên rà soát sớm cấu trúc vốn, mục tiêu dự án và các điều kiện ngành nghề.",
-      "Về hồ sơ, cần thống nhất: (1) mô tả dự án; (2) năng lực/tài liệu chứng minh; (3) cam kết tuân thủ; (4) cơ chế phối hợp giữa các bên. Sai khác nhỏ giữa các biểu mẫu thường dẫn đến vòng bổ sung hồ sơ.",
-      "Trong giai đoạn nộp - tiếp nhận, doanh nghiệp nên chuẩn hóa quy trình phản hồi yêu cầu sửa đổi, lưu vết các phiên bản tài liệu để hạn chế nhầm lẫn.",
-    ],
-  },
-  {
-    slug: "hop-dong-thuong-mai-rui-ro",
-    title: "Hợp đồng thương mại: Nhận diện rủi ro điều khoản ‘điểm gãy’",
-    excerpt:
-      "Một số điều khoản tưởng đơn giản nhưng có thể phát sinh tranh chấp lớn; hướng dẫn rà soát trọng điểm theo bối cảnh giao dịch.",
-    category: "Hợp đồng & Tranh chấp",
-    date: "2026-06-12",
-    readTime: "6 phút",
-    content: [
-      "Đối với hợp đồng thương mại, rủi ro thường tập trung ở điều khoản: phạm vi, giá - cơ chế điều chỉnh, nghiệm thu, nghĩa vụ thanh toán và điều kiện bất khả kháng.",
-      "Doanh nghiệp nên xác định rõ tiêu chuẩn nghiệm thu, thời điểm chuyển giao rủi ro và cơ chế xử lý thay đổi (change order) nếu việc thực hiện vượt dự kiến.",
-      "Về tranh chấp, nên chuẩn hóa phương thức giải quyết (thương lượng, trọng tài/tòa án), điều khoản luật áp dụng và cơ chế bảo toàn chứng cứ.",
-    ],
-  },
-  {
-    slug: "phap-ly-fdi-dang-ky",
-    title: "FDI & tuân thủ đăng ký: Chuẩn bị trước để tránh ‘đứt nhịp’",
-    excerpt:
-      "Checklist thực hành giúp nhà đầu tư trong và ngoài nước chuẩn hóa thông tin ngay từ giai đoạn chuẩn bị dự án.",
-    category: "Đầu tư",
-    date: "2026-05-29",
-    readTime: "8 phút",
-    content: [
-      "FDI thường yêu cầu mức độ nhất quán cao giữa kế hoạch đầu tư, tài liệu pháp lý và thông tin pháp nhân. Bất kỳ khác biệt nào có thể làm chậm quá trình thẩm định.",
-      "Nhà đầu tư nên phân loại tài liệu theo nhóm: giấy tờ năng lực, hồ sơ dự án, tài liệu tuân thủ và dữ liệu liên quan người đại diện. Việc phân loại giúp phản hồi yêu cầu sửa đổi nhanh hơn.",
-      "Trong quá trình triển khai, doanh nghiệp cần theo dõi nghĩa vụ sau đăng ký: báo cáo, cập nhật thay đổi, và quản trị nội dung phù hợp với quy định.",
-    ],
-  },
-  {
-    slug: "shtt-dang-ky-nhan-hieu",
-    title: "Sở hữu trí tuệ: Chiến lược đăng ký nhãn hiệu để giảm phản đối",
-    excerpt:
-      "Cách lập mô tả nhãn hiệu, phân nhóm dịch vụ/hàng hóa và chuẩn bị lập luận trước nguy cơ bị từ chối.",
-    category: "Sở hữu trí tuệ",
-    date: "2026-05-18",
-    readTime: "6 phút",
-    content: [
-      "Việc thiết kế nhãn hiệu nên song hành với chiến lược đăng ký: chọn nhóm phù hợp, mô tả rõ phạm vi và tối ưu tính phân biệt.",
-      "Trước khi nộp hồ sơ, doanh nghiệp nên rà soát khả năng trùng/tương tự, kiểm tra dấu hiệu dễ bị cho rằng mô tả chung.",
-      "Trong giai đoạn xét duyệt, hồ sơ cần trình bày lập luận chặt chẽ, tránh suy diễn; tập trung vào khác biệt cốt lõi của dấu hiệu.",
-    ],
-  },
-  {
-    slug: "lao-dong-ky-ket-hop-dong-mau",
-    title: "Lao động: Tối ưu hợp đồng lao động theo khung pháp lý hiện hành",
-    excerpt:
-      "Nguyên tắc điền thông tin, điều khoản bắt buộc và cách giảm rủi ro tranh chấp khi thay đổi nhân sự.",
-    category: "Lao động",
-    date: "2026-04-26",
-    readTime: "5 phút",
-    content: [
-      "Hợp đồng lao động cần phản ánh đúng bản chất quan hệ lao động, rõ ràng về vị trí công việc, thời hạn và chế độ đã thỏa thuận.",
-      "Một số rủi ro phát sinh khi điều khoản lương thưởng - phụ cấp thiếu cơ chế tính toán hoặc không phù hợp với thực tế chi trả.",
-      "Doanh nghiệp nên cập nhật mẫu hợp đồng định kỳ theo thay đổi pháp luật và lưu hồ sơ điều chỉnh (nếu có).",
-    ],
-  },
-];
-
-export function getLibraryItem(slug: string) {
-  return libraryItems.find((p) => p.slug === slug);
-}
-
-export function getLibraryItemsByCategory(category: string) {
-  return libraryItems.filter((p) => p.category === category);
-}
 
 export const companyHistory = [
   { year: "2015", event: "Thành lập Dịch vụ Pháp lý JUZ legal tại TP.HCM." },

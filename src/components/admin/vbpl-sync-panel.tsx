@@ -26,6 +26,7 @@ type QueueItem = {
 type Props = {
   aiConfigured: boolean;
   serviceRoleConfigured: boolean;
+  autoSyncConfigured: boolean;
   stats: {
     documentCount: number;
     queuePending: number;
@@ -38,6 +39,7 @@ type Props = {
 export function VbplSyncPanel({
   aiConfigured,
   serviceRoleConfigured,
+  autoSyncConfigured,
   stats,
   jobs,
   queue,
@@ -75,19 +77,22 @@ export function VbplSyncPanel({
     }
   }
 
-  async function runSync(useAi: boolean) {
+  async function runSync(useAi: boolean, auto = false) {
     setLoading(true);
     setMessage(null);
     try {
       const response = await fetch("/api/admin/vbpl/sync", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ useAi, limit: 10 }),
+        body: JSON.stringify({ useAi, auto, limit: 10 }),
       });
       const payload = await response.json();
       if (!response.ok) throw new Error(payload.error ?? "Sync failed");
+      const autoInfo = payload.auto
+        ? ` · Phát hiện ${payload.discovered} · Hàng đợi ${payload.enqueued} · Làm mới ${payload.refreshed}`
+        : "";
       setMessage(
-        `Đồng bộ xong: ${payload.success}/${payload.processed} thành công (${payload.aiModel}).`
+        `Đồng bộ xong: ${payload.success}/${payload.processed} thành công (${payload.aiModel})${autoInfo}.`
       );
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Lỗi đồng bộ");
@@ -119,6 +124,16 @@ export function VbplSyncPanel({
         </p>
       )}
 
+      {autoSyncConfigured ? (
+        <p className="rounded-sm border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-900">
+          Tự động hóa đã bật: Vercel Cron chạy 4 lần/ngày (01:00, 07:00, 13:00, 19:00 UTC) — quét vbpl.vn, tải văn bản mới và cập nhật Supabase.
+        </p>
+      ) : (
+        <p className="rounded-sm border border-navy/10 bg-surface px-4 py-3 text-sm text-muted">
+          Để tự động hoàn toàn: thêm <code>VBPL_SYNC_SECRET</code> hoặc <code>CRON_SECRET</code> trên Vercel (đã có <code>vercel.json</code> cron).
+        </p>
+      )}
+
       <div className="rounded-lg border border-navy/10 bg-white p-5 sm:p-6">
         <h3 className="font-serif text-xl text-navy">Thêm văn bản vbpl vào hàng đợi</h3>
         <p className="mt-2 text-sm text-muted">
@@ -140,19 +155,27 @@ export function VbplSyncPanel({
         <Button
           type="button"
           variant="luxury"
-          onClick={() => runSync(true)}
+          onClick={() => runSync(true, true)}
           disabled={loading || !serviceRoleConfigured}
         >
           {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
-          Chạy đồng bộ AI
+          Tự động quét + đồng bộ
         </Button>
         <Button
           type="button"
           variant="outline"
-          onClick={() => runSync(false)}
+          onClick={() => runSync(true, false)}
           disabled={loading || !serviceRoleConfigured}
         >
-          Chạy heuristic (không AI)
+          Chạy hàng đợi hiện tại
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => runSync(false, false)}
+          disabled={loading || !serviceRoleConfigured}
+        >
+          Heuristic (không AI)
         </Button>
       </div>
 

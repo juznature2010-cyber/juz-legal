@@ -10,6 +10,7 @@ import {
 } from "@/lib/supabase/queries-legal";
 import { isAiExtractionConfigured } from "@/lib/vbpl/ai-extractor";
 import { isAdminClientConfigured } from "@/lib/supabase/admin";
+import { isAutoSyncConfigured } from "@/lib/vbpl/sync-service";
 
 export const metadata = createMetadata({
   title: "Đồng bộ vbpl.vn",
@@ -42,6 +43,7 @@ export default async function AdminLegalLibraryPage() {
           <VbplSyncPanel
             aiConfigured={isAiExtractionConfigured()}
             serviceRoleConfigured={isAdminClientConfigured()}
+            autoSyncConfigured={isAutoSyncConfigured()}
             stats={stats}
             jobs={jobs}
             queue={queue}

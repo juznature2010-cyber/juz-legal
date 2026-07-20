@@ -147,7 +147,7 @@ export function extractDocumentHeuristic(
     status: text.toLowerCase().includes("hết hiệu lực")
       ? "het-hieu-luc"
       : "con-hieu-luc",
-    sections: articleMatches.map(({ sortHint, ...section }) => section),
+    sections: articleMatches.map(({ sortHint: _sortHint, ...section }) => section),
   });
 }
 

@@ -4,6 +4,13 @@ import {
   extractDocumentWithAi,
   isAiExtractionConfigured,
 } from "@/lib/vbpl/ai-extractor";
+import {
+  DEFAULT_VBPL_ITEM_IDS,
+  VBPL_MAX_SYNC_ATTEMPTS,
+  getVbplAutoSyncLimit,
+  getVbplRefreshDays,
+} from "@/lib/vbpl/config";
+import { discoverVbplItemIds } from "@/lib/vbpl/discover";
 import { fetchVbplHtml, buildVbplDocumentUrl } from "@/lib/vbpl/fetch";
 import { upsertExtractedDocument } from "@/lib/vbpl/repository";
 
@@ -23,19 +30,65 @@ export type SyncJobResult = {
   aiModel?: string;
 };
 
+export type AutoSyncResult = SyncJobResult & {
+  discovered: number;
+  enqueued: number;
+  refreshed: number;
+  discoveryErrors: string[];
+};
+
 type QueueItem = {
   id: string;
   vbpl_item_id: string;
   source_url: string;
+  attempts: number;
 };
+
+type AdminClient = NonNullable<ReturnType<typeof createAdminClient>>;
+
+export async function runAutoVbplSync(options: {
+  triggeredBy: string;
+  useAi?: boolean;
+}): Promise<AutoSyncResult> {
+  const supabase = createAdminClient();
+  if (!supabase) {
+    throw new Error(
+      "SUPABASE_SERVICE_ROLE_KEY chưa cấu hình — không thể đồng bộ vào Supabase"
+    );
+  }
+
+  const discovery = await discoverVbplItemIds();
+  const enqueuedFromDiscovery = await enqueueVbplItemsInternal(
+    supabase,
+    discovery.itemIds
+  );
+  const refreshed = await enqueueStaleDocuments(supabase);
+  const limit = getVbplAutoSyncLimit();
+
+  const syncResult = await runVbplSync({
+    triggeredBy: options.triggeredBy,
+    useAi: options.useAi,
+    limit,
+    supabase,
+  });
+
+  return {
+    ...syncResult,
+    discovered: discovery.itemIds.length,
+    enqueued: enqueuedFromDiscovery,
+    refreshed,
+    discoveryErrors: discovery.errors,
+  };
+}
 
 export async function runVbplSync(options: {
   triggeredBy: string;
   itemIds?: string[];
   useAi?: boolean;
   limit?: number;
+  supabase?: AdminClient;
 }): Promise<SyncJobResult> {
-  const supabase = createAdminClient();
+  const supabase = options.supabase ?? createAdminClient();
   if (!supabase) {
     throw new Error(
       "SUPABASE_SERVICE_ROLE_KEY chưa cấu hình — không thể đồng bộ vào Supabase"
@@ -44,7 +97,7 @@ export async function runVbplSync(options: {
 
   const useAi = options.useAi ?? isAiExtractionConfigured();
   const aiModel = useAi ? process.env.AI_MODEL?.trim() || "gpt-4o-mini" : "heuristic";
-  const limit = options.limit ?? 20;
+  const limit = options.limit ?? getVbplAutoSyncLimit();
 
   const { data: job, error: jobError } = await supabase
     .from("vbpl_sync_jobs")
@@ -159,45 +212,67 @@ export async function runVbplSync(options: {
 }
 
 async function resolveQueueItems(
-  supabase: NonNullable<ReturnType<typeof createAdminClient>>,
+  supabase: AdminClient,
   itemIds: string[] | undefined,
   limit: number
-): Promise<Array<QueueItem & { attempts: number }>> {
+): Promise<QueueItem[]> {
   if (itemIds?.length) {
-    for (const itemId of itemIds) {
-      await supabase.from("vbpl_sync_queue").upsert(
-        {
-          vbpl_item_id: itemId,
-          source_url: buildVbplDocumentUrl(itemId),
-          status: "pending",
-          scheduled_at: new Date().toISOString(),
-        },
-        { onConflict: "vbpl_item_id" }
-      );
-    }
+    await enqueueVbplItemsInternal(supabase, itemIds);
   }
 
-  const { data, error } = await supabase
+  const { data: pending, error: pendingError } = await supabase
     .from("vbpl_sync_queue")
     .select("id, vbpl_item_id, source_url, attempts")
-    .in("status", ["pending", "failed"])
+    .eq("status", "pending")
     .order("priority", { ascending: false })
     .order("scheduled_at", { ascending: true })
     .limit(limit);
 
-  if (error) throw new Error(error.message);
-  return (data ?? []) as Array<QueueItem & { attempts: number }>;
+  if (pendingError) throw new Error(pendingError.message);
+
+  const remaining = limit - (pending?.length ?? 0);
+  let retryItems: QueueItem[] = [];
+
+  if (remaining > 0) {
+    const { data: failed, error: failedError } = await supabase
+      .from("vbpl_sync_queue")
+      .select("id, vbpl_item_id, source_url, attempts")
+      .eq("status", "failed")
+      .lt("attempts", VBPL_MAX_SYNC_ATTEMPTS)
+      .order("scheduled_at", { ascending: true })
+      .limit(remaining);
+
+    if (failedError) throw new Error(failedError.message);
+    retryItems = (failed ?? []) as QueueItem[];
+  }
+
+  const combined = [...((pending ?? []) as QueueItem[]), ...retryItems];
+
+  if (!combined.length) {
+    await enqueueVbplItemsInternal(supabase, [...DEFAULT_VBPL_ITEM_IDS]);
+    const { data: seeded, error: seededError } = await supabase
+      .from("vbpl_sync_queue")
+      .select("id, vbpl_item_id, source_url, attempts")
+      .eq("status", "pending")
+      .limit(limit);
+
+    if (seededError) throw new Error(seededError.message);
+    return (seeded ?? []) as QueueItem[];
+  }
+
+  return combined.slice(0, limit);
 }
 
-export async function enqueueVbplItems(itemIds: string[]) {
-  const supabase = createAdminClient();
-  if (!supabase) throw new Error("SUPABASE_SERVICE_ROLE_KEY chưa cấu hình");
+async function enqueueVbplItemsInternal(supabase: AdminClient, itemIds: string[]) {
+  if (!itemIds.length) return 0;
 
-  const rows = itemIds.map((itemId) => ({
+  const unique = [...new Set(itemIds.filter((id) => /^\d+$/.test(id)))];
+  const rows = unique.map((itemId) => ({
     vbpl_item_id: itemId,
     source_url: buildVbplDocumentUrl(itemId),
     status: "pending" as const,
     scheduled_at: new Date().toISOString(),
+    last_error: null,
   }));
 
   const { error } = await supabase
@@ -206,4 +281,43 @@ export async function enqueueVbplItems(itemIds: string[]) {
 
   if (error) throw new Error(error.message);
   return rows.length;
+}
+
+async function enqueueStaleDocuments(supabase: AdminClient) {
+  const refreshDays = getVbplRefreshDays();
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - refreshDays);
+
+  const { data, error } = await supabase
+    .from("legal_documents")
+    .select("vbpl_item_id, synced_at")
+    .not("vbpl_item_id", "is", null);
+
+  if (error) throw new Error(error.message);
+
+  const staleIds = (data ?? [])
+    .filter((row) => {
+      if (!row.vbpl_item_id) return false;
+      if (!row.synced_at) return true;
+      return new Date(row.synced_at) < cutoff;
+    })
+    .map((row) => row.vbpl_item_id as string);
+
+  if (!staleIds.length) return 0;
+
+  await enqueueVbplItemsInternal(supabase, staleIds);
+  return staleIds.length;
+}
+
+export async function enqueueVbplItems(itemIds: string[]) {
+  const supabase = createAdminClient();
+  if (!supabase) throw new Error("SUPABASE_SERVICE_ROLE_KEY chưa cấu hình");
+  return enqueueVbplItemsInternal(supabase, itemIds);
+}
+
+export function isAutoSyncConfigured() {
+  return Boolean(
+    process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() &&
+      (process.env.VBPL_SYNC_SECRET?.trim() || process.env.CRON_SECRET?.trim())
+  );
 }
